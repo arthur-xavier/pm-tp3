@@ -1,6 +1,6 @@
 package br.ufmg.dcc052.oncebook.character;
 
-import android.graphics.Picture;
+import android.graphics.Bitmap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,24 +12,37 @@ import br.ufmg.dcc052.oncebook.relationship.Relationship;
  */
 public class Character {
 
+  private long id;
   private String name;
   private String description;
   private boolean isAlive;
   private int appearancePage;
-  private Picture picture;
+  private Bitmap picture;
   private List<Relationship> relationships;
 
   public Character(String name) {
     this(name, "", true, 0, null);
   }
 
-  public Character(String name, String description, boolean isAlive, int appearancePage, Picture picture) {
+  public Character(String name, String description, boolean isAlive, int appearancePage, Bitmap picture) {
     this.name = name;
     this.description = description;
     this.isAlive = isAlive;
     this.appearancePage = appearancePage;
     this.picture = picture;
     this.relationships = new ArrayList<Relationship>();
+  }
+
+  public Character(long id, String name, String description, boolean isAlive, int appearancePage, Bitmap picture) {
+    this(name, description, isAlive, appearancePage, picture);
+    this.id = id;
+  }
+
+  public long getId() {
+    return id;
+  }
+  public void setId(long id) {
+    this.id = id;
   }
 
   public String getName() {
@@ -60,10 +73,10 @@ public class Character {
     this.appearancePage = appearancePage;
   }
 
-  public Picture getPicture() {
+  public Bitmap getPicture() {
     return picture;
   }
-  public void setPicture(Picture picture) {
+  public void setPicture(Bitmap picture) {
     this.picture = picture;
   }
 
