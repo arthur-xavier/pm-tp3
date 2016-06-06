@@ -1,11 +1,13 @@
-package br.ufmg.dcc052.oncebook.character;
+package br.ufmg.dcc052.oncebook.relationship;
+
+import br.ufmg.dcc052.oncebook.character.Character;
 
 /**
  * Created by xavier on 6/6/16.
  */
 public class BinaryRelationship extends Relationship {
 
-  private Character[] characters;
+  private br.ufmg.dcc052.oncebook.character.Character[] characters;
 
   public BinaryRelationship(String name) {
     super(name);

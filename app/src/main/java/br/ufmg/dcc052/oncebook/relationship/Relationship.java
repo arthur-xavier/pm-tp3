@@ -1,4 +1,6 @@
-package br.ufmg.dcc052.oncebook.character;
+package br.ufmg.dcc052.oncebook.relationship;
+
+import br.ufmg.dcc052.oncebook.character.*;
 
 /**
  * Created by xavier on 6/6/16.
@@ -18,5 +20,5 @@ public abstract class Relationship {
     this.name = name;
   }
 
-  public abstract Character[] getCharacters();
+  public abstract br.ufmg.dcc052.oncebook.character.Character[] getCharacters();
 }

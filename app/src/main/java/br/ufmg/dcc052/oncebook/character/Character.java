@@ -5,6 +5,8 @@ import android.graphics.Picture;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.ufmg.dcc052.oncebook.relationship.Relationship;
+
 /**
  * Created by xavier on 6/6/16.
  */
