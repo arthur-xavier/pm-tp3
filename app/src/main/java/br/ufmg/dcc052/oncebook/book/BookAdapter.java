@@ -12,7 +12,7 @@ import android.widget.CursorAdapter;
 public class BookAdapter extends CursorAdapter {
 
   public BookAdapter(Context context) {
-    super(context, new SQLiteBookRepository(context).getAllCursor());
+    super(context, new SQLiteBookRepository(context).getAllCursor(), 0);
   }
 
   @Override
