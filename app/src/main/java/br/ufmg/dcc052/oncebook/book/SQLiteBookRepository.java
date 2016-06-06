@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import br.ufmg.dcc052.oncebook.storage.DatabaseHelper;
@@ -15,7 +14,8 @@ import br.ufmg.dcc052.oncebook.storage.SQLiteRepository;
 /**
  * Created by xavier on 6/6/16.
  */
-public class SQLiteBookRepository implements IBookRepository, SQLiteRepository<Book>, ICursorLoader {
+public class SQLiteBookRepository extends SQLiteRepository<Book>
+                                  implements IBookRepository, ICursorLoader {
 
   private static final String TABLE_NAME = "books";
   private static final String COLUMN_NAME_ID = "_id";
@@ -100,20 +100,5 @@ public class SQLiteBookRepository implements IBookRepository, SQLiteRepository<B
     String name = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_NAME));
     String description = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_DESCRIPTION));
     return new Book(id, name, description);
-  }
-
-  @Override
-  public List<Book> cursorToEntities(Cursor cursor) {
-    if(cursor == null) {
-      return null;
-    }
-
-    List<Book> books = new ArrayList<>();
-    cursor.moveToFirst();
-    while(!cursor.isAfterLast()) {
-      books.add(this.cursorToEntity(cursor));
-      cursor.moveToNext();
-    }
-    return books;
   }
 }

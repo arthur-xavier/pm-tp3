@@ -14,7 +14,7 @@ public interface IBookRepository extends IRepository<Book, Long> {
   public List<Book> getAll();
   public List<Book> findByName(String name);
   @Override
-  public void save(Book entity);
+  public void save(Book book);
   @Override
-  public void delete(Book entity);
+  public void delete(Book book);
 }
