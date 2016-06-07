@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.List;
 
 import br.ufmg.dcc052.oncebook.character.Character;
+import br.ufmg.dcc052.oncebook.character.ICharacterRepository;
 import br.ufmg.dcc052.oncebook.character.SQLiteCharacterRepository;
 import br.ufmg.dcc052.oncebook.storage.DatabaseHelper;
 import br.ufmg.dcc052.oncebook.storage.ICursorLoader;
@@ -28,7 +29,7 @@ public class SQLiteRelationshipRepository extends SQLiteRepository<Relationship>
     COLUMN_NAME_SECONDCHARACTER };
 
   private DatabaseHelper databaseHelper;
-  private SQLiteCharacterRepository characterRepository;
+  private ICharacterRepository characterRepository;
 
   public SQLiteRelationshipRepository(Context context) {
     this.databaseHelper = new DatabaseHelper(context);
