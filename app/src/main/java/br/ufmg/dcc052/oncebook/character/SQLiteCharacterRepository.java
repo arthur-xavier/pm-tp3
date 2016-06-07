@@ -125,11 +125,15 @@ public class SQLiteCharacterRepository extends SQLiteRepository<Character>
     String description = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_DESCRIPTION));
     int appearancePage = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_APPEARANCEPAGE));
     Bitmap picture = BitmapUtils.getBitmap(cursor.getBlob(cursor.getColumnIndex(COLUMN_NAME_PICTURE)));
+
+    // has book_id column ==> return character with book
     try {
       int bookId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_NAME_BOOK));
       Book book = this.bookRepository.getById(bookId);
       return new Character(id, name, description, book, appearancePage, picture);
-    } catch(IllegalArgumentException e) {
+    }
+    // else ==> return character without book
+    catch(IllegalArgumentException e) {
       return new Character(id, name, description, null, appearancePage, picture);
     }
   }
