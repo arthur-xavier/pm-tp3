@@ -14,7 +14,7 @@ import br.ufmg.dcc052.oncebook.character.Character;
  */
 public class Book implements Serializable {
 
-  private long id;
+  private int id;
   private String name;
   @Nullable
   private String description;
@@ -31,15 +31,15 @@ public class Book implements Serializable {
     this.characters = new ArrayList<Character>();
   }
 
-  public Book(long id, String name, String description) {
+  public Book(int id, String name, String description) {
     this(name, description);
     this.id = id;
   }
 
-  public long getId() {
+  public int getId() {
     return id;
   }
-  public void setId(long id) {
+  public void setId(int id) {
     this.id = id;
   }
 

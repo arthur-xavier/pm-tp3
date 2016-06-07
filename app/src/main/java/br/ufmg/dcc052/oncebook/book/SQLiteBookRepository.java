@@ -31,7 +31,7 @@ public class SQLiteBookRepository extends SQLiteRepository<Book>
   }
 
   @Override
-  public Book getById(Long id) {
+  public Book getById(Integer id) {
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
     String where = COLUMN_NAME_ID + "=" + id;
     Cursor cursor = db.query(TABLE_NAME, ALL_COLUMNS, where, null, null, null, null);
@@ -96,7 +96,7 @@ public class SQLiteBookRepository extends SQLiteRepository<Book>
       return null;
     }
 
-    long id = cursor.getLong(cursor.getColumnIndex(COLUMN_NAME_ID));
+    int id = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_ID));
     String name = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_NAME));
     String description = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_DESCRIPTION));
     return new Book(id, name, description);

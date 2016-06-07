@@ -7,9 +7,9 @@ import br.ufmg.dcc052.oncebook.storage.IRepository;
 /**
  * Created by xavier on 6/6/16.
  */
-public interface IBookRepository extends IRepository<Book, Long> {
+public interface IBookRepository extends IRepository<Book, Integer> {
   @Override
-  public Book getById(Long id);
+  public Book getById(Integer id);
   @Override
   public List<Book> getAll();
   public List<Book> findByName(String name);
