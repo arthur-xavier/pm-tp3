@@ -8,6 +8,9 @@ import android.graphics.Bitmap;
 
 import java.util.List;
 
+import br.ufmg.dcc052.oncebook.book.Book;
+import br.ufmg.dcc052.oncebook.book.IBookRepository;
+import br.ufmg.dcc052.oncebook.book.SQLiteBookRepository;
 import br.ufmg.dcc052.oncebook.storage.BitmapUtils;
 import br.ufmg.dcc052.oncebook.storage.DatabaseHelper;
 import br.ufmg.dcc052.oncebook.storage.ICursorLoader;
@@ -23,20 +26,25 @@ public class SQLiteCharacterRepository extends SQLiteRepository<Character>
   private static final String COLUMN_NAME_ID = "_id";
   private static final String COLUMN_NAME_NAME = "name";
   private static final String COLUMN_NAME_DESCRIPTION = "description";
-  private static final String COLUMN_NAME_ISALIVE = "isAlive";
+  private static final String COLUMN_NAME_BOOK = "book_id";
   private static final String COLUMN_NAME_APPEARANCEPAGE = "appearancePage";
   private static final String COLUMN_NAME_PICTURE = "picture";
+
   private static final String[] ALL_COLUMNS = { COLUMN_NAME_ID, COLUMN_NAME_NAME,
-    COLUMN_NAME_DESCRIPTION, COLUMN_NAME_ISALIVE, COLUMN_NAME_APPEARANCEPAGE, COLUMN_NAME_PICTURE };
+    COLUMN_NAME_DESCRIPTION, COLUMN_NAME_BOOK, COLUMN_NAME_APPEARANCEPAGE, COLUMN_NAME_PICTURE };
+  private static final String[] ALL_COLUMNS_BUT_BOOK = { COLUMN_NAME_ID, COLUMN_NAME_NAME,
+    COLUMN_NAME_DESCRIPTION, COLUMN_NAME_APPEARANCEPAGE, COLUMN_NAME_PICTURE };
 
   private DatabaseHelper databaseHelper;
+  private IBookRepository bookRepository;
 
   public SQLiteCharacterRepository(Context context) {
     this.databaseHelper = new DatabaseHelper(context);
+    this.bookRepository = new SQLiteBookRepository(context);
   }
 
   @Override
-  public Character getById(Long id) {
+  public Character getById(Integer id) {
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
     String where = COLUMN_NAME_ID + "=" + id;
     Cursor cursor = db.query(TABLE_NAME, ALL_COLUMNS, where, null, null, null, null);
@@ -61,6 +69,15 @@ public class SQLiteCharacterRepository extends SQLiteRepository<Character>
   }
 
   @Override
+  public Cursor getAllByBookCursor(Book book) {
+    SQLiteDatabase db = databaseHelper.getReadableDatabase();
+    String where = COLUMN_NAME_BOOK + "=" + book.getId();
+    Cursor cursor = db.query(TABLE_NAME, ALL_COLUMNS_BUT_BOOK, where, null, null, null, null);
+    db.close();
+    return cursor;
+  }
+
+  @Override
   public List<Character> findByName(String name) {
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
     String where = COLUMN_NAME_NAME + "LIKE" + name + "%";
@@ -76,7 +93,6 @@ public class SQLiteCharacterRepository extends SQLiteRepository<Character>
     ContentValues values = new ContentValues();
     values.put(COLUMN_NAME_NAME, character.getName());
     values.put(COLUMN_NAME_DESCRIPTION, character.getDescription());
-    values.put(COLUMN_NAME_ISALIVE, character.isAlive());
     values.put(COLUMN_NAME_APPEARANCEPAGE, character.getAppearancePage());
     values.put(COLUMN_NAME_PICTURE, BitmapUtils.getBytes(character.getPicture()));
 
@@ -104,13 +120,17 @@ public class SQLiteCharacterRepository extends SQLiteRepository<Character>
       return null;
     }
 
-    long id = cursor.getLong(cursor.getColumnIndex(COLUMN_NAME_ID));
+    int id = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_ID));
     String name = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_NAME));
     String description = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_DESCRIPTION));
-    boolean isAlive = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_ISALIVE)) == 1;
     int appearancePage = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_APPEARANCEPAGE));
     Bitmap picture = BitmapUtils.getBitmap(cursor.getBlob(cursor.getColumnIndex(COLUMN_NAME_PICTURE)));
-
-    return new Character(id, name, description, isAlive, appearancePage, picture);
+    try {
+      int bookId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_NAME_BOOK));
+      Book book = this.bookRepository.getById(bookId);
+      return new Character(id, name, description, book, appearancePage, picture);
+    } catch(IllegalArgumentException e) {
+      return new Character(id, name, description, null, appearancePage, picture);
+    }
   }
 }

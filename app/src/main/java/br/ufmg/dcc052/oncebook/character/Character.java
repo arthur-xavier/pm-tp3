@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.ufmg.dcc052.oncebook.book.Book;
 import br.ufmg.dcc052.oncebook.relationship.Relationship;
 
 /**
@@ -12,36 +13,40 @@ import br.ufmg.dcc052.oncebook.relationship.Relationship;
  */
 public class Character {
 
-  private long id;
+  private int id;
   private String name;
   private String description;
-  private boolean isAlive;
+  private Book book;
   private int appearancePage;
   private Bitmap picture;
   private List<Relationship> relationships;
 
   public Character(String name) {
-    this(name, "", true, 0, null);
+    this(name, "", null, 0, null);
   }
 
-  public Character(String name, String description, boolean isAlive, int appearancePage, Bitmap picture) {
+  public Character(String name, String description, Bitmap picture) {
+    this(name, description, null, 0, picture);
+  }
+
+  public Character(String name, String description, Book book, int appearancePage, Bitmap picture) {
     this.name = name;
     this.description = description;
-    this.isAlive = isAlive;
+    this.book = book;
     this.appearancePage = appearancePage;
     this.picture = picture;
     this.relationships = new ArrayList<Relationship>();
   }
 
-  public Character(long id, String name, String description, boolean isAlive, int appearancePage, Bitmap picture) {
-    this(name, description, isAlive, appearancePage, picture);
+  public Character(int id, String name, String description, Book book, int appearancePage, Bitmap picture) {
+    this(name, description, book, appearancePage, picture);
     this.id = id;
   }
 
-  public long getId() {
+  public int getId() {
     return id;
   }
-  public void setId(long id) {
+  public void setId(int id) {
     this.id = id;
   }
 
@@ -59,11 +64,11 @@ public class Character {
     this.description = description;
   }
 
-  public boolean isAlive() {
-    return isAlive;
+  public Book getBook() {
+    return book;
   }
-  public void setIsAlive(boolean isAlive) {
-    this.isAlive = isAlive;
+  public void setBook(Book book) {
+    this.book = book;
   }
 
   public int getAppearancePage() {
