@@ -22,13 +22,13 @@ import br.ufmg.dcc052.oncebook.storage.SQLiteRepository;
 public class SQLiteCharacterRepository extends SQLiteRepository<Character>
                                        implements ICharacterRepository, ICursorLoader {
 
-  private static final String TABLE_NAME = "characters";
-  private static final String COLUMN_NAME_ID = "_id";
-  private static final String COLUMN_NAME_NAME = "name";
-  private static final String COLUMN_NAME_DESCRIPTION = "description";
-  private static final String COLUMN_NAME_BOOK = "book_id";
-  private static final String COLUMN_NAME_APPEARANCEPAGE = "appearancePage";
-  private static final String COLUMN_NAME_PICTURE = "picture";
+  public static final String TABLE_NAME = "characters";
+  public static final String COLUMN_NAME_ID = "_id";
+  public static final String COLUMN_NAME_NAME = "name";
+  public static final String COLUMN_NAME_DESCRIPTION = "description";
+  public static final String COLUMN_NAME_BOOK = "book_id";
+  public static final String COLUMN_NAME_APPEARANCEPAGE = "appearancePage";
+  public static final String COLUMN_NAME_PICTURE = "picture";
 
   private static final String[] ALL_COLUMNS = { COLUMN_NAME_ID, COLUMN_NAME_NAME,
     COLUMN_NAME_DESCRIPTION, COLUMN_NAME_BOOK, COLUMN_NAME_APPEARANCEPAGE, COLUMN_NAME_PICTURE };

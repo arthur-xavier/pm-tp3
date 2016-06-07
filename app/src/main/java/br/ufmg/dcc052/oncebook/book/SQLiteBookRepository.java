@@ -17,11 +17,11 @@ import br.ufmg.dcc052.oncebook.storage.SQLiteRepository;
 public class SQLiteBookRepository extends SQLiteRepository<Book>
                                   implements IBookRepository, ICursorLoader {
 
-  private static final String TABLE_NAME = "books";
-  private static final String COLUMN_NAME_ID = "_id";
-  private static final String COLUMN_NAME_NAME = "name";
-  private static final String COLUMN_NAME_DESCRIPTION = "description";
-  private static final String[] ALL_COLUMNS = { COLUMN_NAME_ID, COLUMN_NAME_NAME,
+  public static final String TABLE_NAME = "books";
+  public static final String COLUMN_NAME_ID = "_id";
+  public static final String COLUMN_NAME_NAME = "name";
+  public static final String COLUMN_NAME_DESCRIPTION = "description";
+  public static final String[] ALL_COLUMNS = { COLUMN_NAME_ID, COLUMN_NAME_NAME,
                                                 COLUMN_NAME_DESCRIPTION };
 
   private DatabaseHelper databaseHelper;

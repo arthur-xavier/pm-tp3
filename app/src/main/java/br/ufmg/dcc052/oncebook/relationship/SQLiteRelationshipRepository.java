@@ -21,11 +21,11 @@ import br.ufmg.dcc052.oncebook.storage.SQLiteRepository;
 public class SQLiteRelationshipRepository extends SQLiteRepository<Relationship>
                                        implements IRelationshipRepository, ICursorLoader {
 
-  private static final String TABLE_NAME = "relationships";
-  private static final String COLUMN_NAME_NAME = "name";
-  private static final String COLUMN_NAME_FISRTCHARACTER = "firstCharacter_id";
-  private static final String COLUMN_NAME_SECONDCHARACTER = "secondCharacter_id";
-  private static final String[] ALL_COLUMNS = { COLUMN_NAME_NAME, COLUMN_NAME_FISRTCHARACTER,
+  public static final String TABLE_NAME = "relationships";
+  public static final String COLUMN_NAME_NAME = "name";
+  public static final String COLUMN_NAME_FISRTCHARACTER = "firstCharacter_id";
+  public static final String COLUMN_NAME_SECONDCHARACTER = "secondCharacter_id";
+  public static final String[] ALL_COLUMNS = { COLUMN_NAME_NAME, COLUMN_NAME_FISRTCHARACTER,
     COLUMN_NAME_SECONDCHARACTER };
 
   private DatabaseHelper databaseHelper;
@@ -90,8 +90,8 @@ public class SQLiteRelationshipRepository extends SQLiteRepository<Relationship>
     }
 
     String name = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_NAME));
-    long firstCharacterId = cursor.getLong(cursor.getColumnIndex(COLUMN_NAME_FISRTCHARACTER));
-    long secondCharacterId = cursor.getLong(cursor.getColumnIndex(COLUMN_NAME_SECONDCHARACTER));
+    int firstCharacterId = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_FISRTCHARACTER));
+    int secondCharacterId = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_SECONDCHARACTER));
 
     Character firstCharacter = this.characterRepository.getById(firstCharacterId);
     Character secondCharacter = this.characterRepository.getById(secondCharacterId);
