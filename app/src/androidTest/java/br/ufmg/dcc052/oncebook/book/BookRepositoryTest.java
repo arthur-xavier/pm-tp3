@@ -66,8 +66,8 @@ public class BookRepositoryTest extends AndroidTestCase {
 
     List<Book> allBooks = bookRepository.getAll();
     assertEquals(2, allBooks.size());
-    assertEquals(book1.getName(), allBooks.get(0).getName());
-    assertEquals(book2.getName(), allBooks.get(1).getName());
+    assertEquals(book2.getName(), allBooks.get(0).getName());
+    assertEquals(book1.getName(), allBooks.get(1).getName());
   }
 
   public void testFindBookByName() {

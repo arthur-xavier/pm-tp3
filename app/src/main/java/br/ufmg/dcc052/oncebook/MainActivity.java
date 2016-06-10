@@ -32,7 +32,7 @@ public class MainActivity extends ActionBarActivity {
 
   public void countRecords() {
     SQLiteBookRepository sbr = new SQLiteBookRepository(this);
-    int count = sbr.count();
+    int count = sbr.getAllCursor().getCount();
     TextView textViewRecordCount = (TextView) findViewById(R.id.textViewRecordCount);
     textViewRecordCount.setText(count + " records found.");
   }
