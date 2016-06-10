@@ -18,7 +18,10 @@
     </activity>
     <activity
       android:name=".BookActivity"
-      android:label="@string/title_activity_book"></activity>
+      android:label="@string/title_activity_book" />
+    <activity
+      android:name=".book.RelationshipActivity"
+      android:label="@string/title_activity_relationship"></activity>
   </application>
 
 </manifest>

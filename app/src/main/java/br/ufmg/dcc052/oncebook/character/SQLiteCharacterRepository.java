@@ -110,7 +110,11 @@ public class SQLiteCharacterRepository extends SQLiteRepository<Character>
     values.put(COLUMN_NAME_DESCRIPTION, character.getDescription());
     values.put(COLUMN_NAME_APPEARANCEPAGE, character.getAppearancePage());
     values.put(COLUMN_NAME_PICTURE, BitmapUtils.getBytes(character.getPicture()));
-    values.put(COLUMN_NAME_BOOK, character.getBook().getId());
+    int bookId = 0;
+    if (character.getBook() != null) {
+      bookId = character.getBook().getId();
+    }
+    values.put(COLUMN_NAME_BOOK, Integer.toString(bookId));
 
     try {
       String where = COLUMN_NAME_ID + "=" + character.getId();
