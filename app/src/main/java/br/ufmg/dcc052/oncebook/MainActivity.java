@@ -51,7 +51,7 @@ public class MainActivity extends ActionBarActivity {
         tv.setText(name);
         tv.setTag(Integer.toString(id));
         tv.setGravity(Gravity.CENTER_HORIZONTAL);
-        tv.setOnLongClickListener(new OnLongClickListenerBookRecord());
+        tv.setOnLongClickListener(new OnLongClickListenerBookRecord(this));
         linearLayoutRecords.addView(tv);
       }
     } else {

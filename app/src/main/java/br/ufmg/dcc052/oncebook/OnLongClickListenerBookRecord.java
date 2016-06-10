@@ -9,6 +9,7 @@ import br.ufmg.dcc052.oncebook.book.SQLiteBookRepository;
 import br.ufmg.dcc052.oncebook.book.Book;
 import android.view.LayoutInflater;
 import android.widget.EditText;
+import android.widget.Toast;
 
 /**
  * Created by jotajunior on 6/10/16.
@@ -34,6 +35,8 @@ public class OnLongClickListenerBookRecord implements View.OnLongClickListener {
           public void onClick(DialogInterface dialog, int item) {
             if (item == 0) {
               editRecord(Integer.parseInt(id));
+            } else if (item == 1) {
+              deleteRecord(Integer.parseInt(id));
             }
             dialog.dismiss();
           }
@@ -42,6 +45,14 @@ public class OnLongClickListenerBookRecord implements View.OnLongClickListener {
     return false;
   }
 
+  private void deleteRecord(final int bookId) {
+    SQLiteBookRepository sbr = new SQLiteBookRepository(context);
+    Book book = sbr.getById(bookId);
+    sbr.delete(book);
+    Toast.makeText(context, "Book was deleted successfully.", Toast.LENGTH_SHORT).show();
+    this.ma.readRecords();
+    this.ma.countRecords();
+  }
   private void editRecord(final int bookId) {
     SQLiteBookRepository sbr = new SQLiteBookRepository(context);
     final Book book = sbr.getById(bookId);
@@ -64,9 +75,9 @@ public class OnLongClickListenerBookRecord implements View.OnLongClickListener {
             book.setDescription(editTextDescription.getText().toString());
             SQLiteBookRepository sbr2 = new SQLiteBookRepository(context1);
             sbr2.save(book);
-            /*if (ma != null) {
+            if (ma != null) {
               ma.readRecords();
-            }*/
+            }
             dialog.cancel();
           }
         }).show();

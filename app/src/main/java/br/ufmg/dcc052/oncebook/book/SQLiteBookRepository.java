@@ -82,20 +82,20 @@ public class SQLiteBookRepository extends SQLiteRepository<Book>
 
   @Override
   public void save(Book book) {
-    SQLiteDatabase db = databaseHelper.getWritableDatabase();
-
     ContentValues values = new ContentValues();
     values.put(COLUMN_NAME_NAME, book.getName());
     values.put(COLUMN_NAME_DESCRIPTION, book.getDescription());
 
     if (book.getId() != 0 && getById(book.getId()) != null) {
+      SQLiteDatabase db = databaseHelper.getWritableDatabase();
       String where = COLUMN_NAME_ID + "=" + book.getId();
       db.update(TABLE_NAME, values, where, null);
+      db.close();
     } else {
+      SQLiteDatabase db = databaseHelper.getWritableDatabase();
       db.insert(TABLE_NAME, null, values);
+      db.close();
     }
-
-    db.close();
   }
 
   @Override
