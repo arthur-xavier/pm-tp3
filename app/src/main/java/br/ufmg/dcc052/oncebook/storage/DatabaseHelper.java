@@ -16,11 +16,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
   private static final String DATABASE_NAME = "oncebook.db";
   private static final int DATABASE_VERSION = 1;
 
-  private final Context context;
-
   public DatabaseHelper(Context context) {
     super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    this.context = context;
   }
 
   @Override
@@ -36,7 +33,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
   }
 
   private String createBooksTable() {
-    return "CREATE TABLE " + SQLiteBookRepository.TABLE_NAME + " (" +
+    return "CREATE TABLE IF NOT EXISTS " + SQLiteBookRepository.TABLE_NAME + " (" +
       SQLiteBookRepository.COLUMN_NAME_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
       SQLiteBookRepository.COLUMN_NAME_NAME + " TEXT, " +
       SQLiteBookRepository.COLUMN_NAME_DESCRIPTION + " TEXT" +
@@ -44,7 +41,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
   }
 
   private String createCharactersTable() {
-    return "CREATE TABLE " + SQLiteCharacterRepository.TABLE_NAME + " (" +
+    return "CREATE TABLE IF NOT EXISTS " + SQLiteCharacterRepository.TABLE_NAME + " (" +
       SQLiteCharacterRepository.COLUMN_NAME_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
       SQLiteCharacterRepository.COLUMN_NAME_NAME + " TEXT, " +
       SQLiteCharacterRepository.COLUMN_NAME_DESCRIPTION + " TEXT, " +
@@ -57,7 +54,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
   }
 
   private String createRelationshipsTable() {
-    return "CREATE TABLE " + SQLiteRelationshipRepository.TABLE_NAME + " (" +
+    return "CREATE TABLE IF NOT EXISTS " + SQLiteRelationshipRepository.TABLE_NAME + " (" +
       SQLiteRelationshipRepository.COLUMN_NAME_FISRTCHARACTER + " INTEGER, " +
       SQLiteRelationshipRepository.COLUMN_NAME_SECONDCHARACTER + " INTEGER, " +
       SQLiteRelationshipRepository.COLUMN_NAME_NAME + " TEXT, " +

@@ -12,7 +12,7 @@ public class OnClickListenerBookRecord implements View.OnClickListener {
   public OnClickListenerBookRecord(MainActivity ma) {
     this.ma = ma;
   }
-  
+
   @Override
   public void onClick(View view) {
 

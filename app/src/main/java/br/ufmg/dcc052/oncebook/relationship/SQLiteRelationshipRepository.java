@@ -37,21 +37,26 @@ public class SQLiteRelationshipRepository extends SQLiteRepository<Relationship>
   }
 
   @Override
-  public Relationship getById(Long id) {
+  public Relationship getById(Integer id) {
     throw new UnsupportedOperationException();
   }
 
   @Override
   public List<Relationship> getAll() {
-    return cursorToEntities(getAllCursor());
+    List<Relationship> relationships;
+    Cursor cursor = getAllCursor();
+    try {
+      relationships = cursorToEntities(cursor);
+    } finally {
+      cursor.close();
+    }
+    return relationships;
   }
 
   @Override
   public Cursor getAllCursor() {
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
-    Cursor cursor = db.query(TABLE_NAME, ALL_COLUMNS, null, null, null, null, null);
-    db.close();
-    return cursor;
+    return db.query(TABLE_NAME, ALL_COLUMNS, null, null, null, null, null);
   }
 
   @Override
@@ -64,14 +69,14 @@ public class SQLiteRelationshipRepository extends SQLiteRepository<Relationship>
     values.put(COLUMN_NAME_SECONDCHARACTER, relationship.getSecondCharacter().getId());
 
     try {
-      db.insert(TABLE_NAME, null, values);
-    } catch(SQLiteConstraintException e) {
       String where = COLUMN_NAME_FISRTCHARACTER + "=" + relationship.getFirstCharacter().getId() + " AND " +
-                     COLUMN_NAME_SECONDCHARACTER + "=" + relationship.getSecondCharacter().getId();
-      db.update(TABLE_NAME, values, where, null);
+        COLUMN_NAME_SECONDCHARACTER + "=" + relationship.getSecondCharacter().getId();
+      if (db.update(TABLE_NAME, values, where, null) == 0) {
+        db.insert(TABLE_NAME, null, values);
+      }
+    } finally {
+      closeDatabase(db);
     }
-
-    db.close();
   }
 
   @Override
@@ -79,8 +84,11 @@ public class SQLiteRelationshipRepository extends SQLiteRepository<Relationship>
     SQLiteDatabase db = databaseHelper.getWritableDatabase();
     String where = COLUMN_NAME_FISRTCHARACTER + "=" + relationship.getFirstCharacter().getId() + " AND " +
                    COLUMN_NAME_SECONDCHARACTER + "=" + relationship.getSecondCharacter().getId();
-    db.delete(TABLE_NAME, where, null);
-    db.close();
+    try {
+      db.delete(TABLE_NAME, where, null);
+    } finally {
+      closeDatabase(db);
+    }
   }
 
   @Override
@@ -97,5 +105,11 @@ public class SQLiteRelationshipRepository extends SQLiteRepository<Relationship>
     Character secondCharacter = this.characterRepository.getById(secondCharacterId);
 
     return new Relationship(name, firstCharacter, secondCharacter);
+  }
+
+  private static void closeDatabase(SQLiteDatabase db) {
+    if (db != null && db.isOpen()) {
+      db.close();
+    }
   }
 }

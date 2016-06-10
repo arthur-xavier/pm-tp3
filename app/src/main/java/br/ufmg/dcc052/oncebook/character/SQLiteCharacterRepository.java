@@ -45,49 +45,64 @@ public class SQLiteCharacterRepository extends SQLiteRepository<Character>
 
   @Override
   public Character getById(Integer id) {
+    Character character;
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
     String where = COLUMN_NAME_ID + "=" + id;
-    Cursor cursor = db.query(TABLE_NAME, ALL_COLUMNS, where, null, null, null, null);
-    if(cursor != null) {
-      cursor.moveToFirst();
+    try {
+      Cursor cursor = db.query(TABLE_NAME, ALL_COLUMNS, where, null, null, null, null);
+      if (cursor != null) {
+        cursor.moveToFirst();
+      }
+      character = cursorToEntity(cursor);
+      cursor.close();
+    } finally {
+      closeDatabase(db);
     }
-    db.close();
-    return cursorToEntity(cursor);
+    return character;
   }
 
   @Override
   public List<Character> getAll() {
-    return cursorToEntities(getAllCursor());
+    List<Character> characters;
+    Cursor cursor = getAllCursor();
+    try {
+      characters = cursorToEntities(cursor);
+    } finally {
+      cursor.close();
+    }
+    return characters;
   }
 
   @Override
   public Cursor getAllCursor() {
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
-    Cursor cursor = db.query(TABLE_NAME, ALL_COLUMNS, null, null, null, null, null);
-    db.close();
-    return cursor;
+    return db.query(TABLE_NAME, ALL_COLUMNS, null, null, null, null, null);
   }
 
   @Override
   public Cursor getAllByBookCursor(Book book) {
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
     String where = COLUMN_NAME_BOOK + "=" + book.getId();
-    Cursor cursor = db.query(TABLE_NAME, ALL_COLUMNS_BUT_BOOK, where, null, null, null, null);
-    db.close();
-    return cursor;
+    return db.query(TABLE_NAME, ALL_COLUMNS_BUT_BOOK, where, null, null, null, null);
   }
 
   @Override
   public List<Character> findByName(String name) {
+    List<Character> characters;
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
-    String where = COLUMN_NAME_NAME + "LIKE" + name + "%";
-    Cursor cursor = db.query(TABLE_NAME, ALL_COLUMNS, where, null, null, null, null);
-    db.close();
-    return cursorToEntities(cursor);
+    String where = COLUMN_NAME_NAME + " LIKE '" + name + "%'";
+    try {
+      Cursor cursor = db.query(TABLE_NAME, ALL_COLUMNS, where, null, null, null, null);
+      characters = cursorToEntities(cursor);
+      cursor.close();
+    } finally {
+      db.close();
+    }
+    return characters;
   }
 
   @Override
-  public void save(Character character) {
+  public synchronized void save(Character character) {
     SQLiteDatabase db = databaseHelper.getWritableDatabase();
 
     ContentValues values = new ContentValues();
@@ -96,22 +111,29 @@ public class SQLiteCharacterRepository extends SQLiteRepository<Character>
     values.put(COLUMN_NAME_APPEARANCEPAGE, character.getAppearancePage());
     values.put(COLUMN_NAME_PICTURE, BitmapUtils.getBytes(character.getPicture()));
 
-    if (character.getId() != 0 && getById(character.getId()) != null) {
+    try {
       String where = COLUMN_NAME_ID + "=" + character.getId();
-      db.update(TABLE_NAME, values, where, null);
-    } else {
-      db.insert(TABLE_NAME, null, values);
+      if (character.getId() != 0) {
+        if (db.update(TABLE_NAME, values, where, null) == 0) {
+          character.setId((int) db.insert(TABLE_NAME, null, values));
+        }
+      } else {
+        character.setId((int) db.insert(TABLE_NAME, null, values));
+      }
+    } finally {
+      closeDatabase(db);
     }
-
-    db.close();
   }
 
   @Override
-  public void delete(Character character) {
+  public synchronized void delete(Character character) {
     SQLiteDatabase db = databaseHelper.getWritableDatabase();
     String where = COLUMN_NAME_ID + "=" + character.getId();
-    db.delete(TABLE_NAME, where, null);
-    db.close();
+    try {
+      db.delete(TABLE_NAME, where, null);
+    } finally {
+      closeDatabase(db);
+    }
   }
 
   @Override
@@ -135,6 +157,12 @@ public class SQLiteCharacterRepository extends SQLiteRepository<Character>
     // else ==> return character without book
     catch(IllegalArgumentException e) {
       return new Character(id, name, description, null, appearancePage, picture);
+    }
+  }
+
+  private static void closeDatabase(SQLiteDatabase db) {
+    if (db != null && db.isOpen()) {
+      db.close();
     }
   }
 }
