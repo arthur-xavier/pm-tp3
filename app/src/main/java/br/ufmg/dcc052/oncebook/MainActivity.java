@@ -28,6 +28,7 @@ public class MainActivity extends ActionBarActivity {
    * Used to store the last screen title. For use in {@link #restoreActionBar()}.
    */
   private CharSequence mTitle;
+  public final static String BOOK_ID = "br.ufmg.dcc052.oncebook.BOOK_ID";
 
   public void countRecords() {
     SQLiteBookRepository sbr = new SQLiteBookRepository(this);
@@ -52,6 +53,7 @@ public class MainActivity extends ActionBarActivity {
         tv.setTag(Integer.toString(id));
         tv.setGravity(Gravity.CENTER_HORIZONTAL);
         tv.setOnLongClickListener(new OnLongClickListenerBookRecord(this));
+        tv.setOnClickListener(new OnClickListenerBookRecord(this));
         linearLayoutRecords.addView(tv);
       }
     } else {

@@ -1,5 +1,7 @@
 package br.ufmg.dcc052.oncebook;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 
 /**
@@ -15,6 +17,10 @@ public class OnClickListenerBookRecord implements View.OnClickListener {
 
   @Override
   public void onClick(View view) {
-
+    final Context context = view.getContext();
+    Intent intent = new Intent(this.ma, BookActivity.class);
+    String bookId = view.getTag().toString();
+    intent.putExtra(this.ma.BOOK_ID, bookId);
+    this.ma.startActivity(intent);
   }
 }

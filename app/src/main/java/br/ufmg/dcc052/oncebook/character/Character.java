@@ -25,6 +25,7 @@ public class Character {
     this(name, "", null, 0, null);
   }
 
+  public Character(String name, String description) { this(name, description, null, 0, null); }
   public Character(String name, String description, Bitmap picture) {
     this(name, description, null, 0, picture);
   }

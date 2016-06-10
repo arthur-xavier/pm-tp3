@@ -165,4 +165,12 @@ public class SQLiteCharacterRepository extends SQLiteRepository<Character>
       db.close();
     }
   }
+
+  public int count() {
+    SQLiteDatabase db = databaseHelper.getWritableDatabase();
+    String sql = "SELECT * FROM characters";
+    int count = db.rawQuery(sql, null).getCount();
+    db.close();
+    return count;
+  }
 }
