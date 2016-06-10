@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.List;
-
+import java.util.ArrayList;
 import br.ufmg.dcc052.oncebook.storage.DatabaseHelper;
 import br.ufmg.dcc052.oncebook.storage.ICursorLoader;
 import br.ufmg.dcc052.oncebook.storage.SQLiteRepository;
@@ -44,7 +44,23 @@ public class SQLiteBookRepository extends SQLiteRepository<Book>
 
   @Override
   public List<Book> getAll() {
-    return cursorToEntities(getAllCursor());
+    List<Book> books = new ArrayList<Book>();
+    String sql = "SELECT * FROM books ORDER BY _id DESC";
+    SQLiteDatabase db = databaseHelper.getWritableDatabase();
+    Cursor cursor = db.rawQuery(sql, null);
+    if (cursor.moveToFirst()) {
+      do {
+        int id = Integer.parseInt(cursor.getString(cursor.getColumnIndex("_id")));
+        String name = cursor.getString(cursor.getColumnIndex("name"));
+        String description = cursor.getString(cursor.getColumnIndex("description"));
+        Book book = new Book(id, name, description);
+        books.add(book);
+
+      } while (cursor.moveToNext());
+    }
+    cursor.close();
+    db.close();
+    return books;
   }
 
   @Override
@@ -88,6 +104,14 @@ public class SQLiteBookRepository extends SQLiteRepository<Book>
     String where = COLUMN_NAME_ID + "=" + book.getId();
     db.delete(TABLE_NAME, where, null);
     db.close();
+  }
+
+  public int count() {
+    SQLiteDatabase db = databaseHelper.getWritableDatabase();
+    String sql = "SELECT * FROM books";
+    int count = db.rawQuery(sql, null).getCount();
+    db.close();
+    return count;
   }
 
   @Override

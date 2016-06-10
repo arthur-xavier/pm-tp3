@@ -17,7 +17,11 @@ import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-
+import android.widget.Button;
+import android.widget.LinearLayout;
+import br.ufmg.dcc052.oncebook.book.SQLiteBookRepository;
+import br.ufmg.dcc052.oncebook.book.Book;
+import java.util.List;
 public class MainActivity extends ActionBarActivity {
 
   /**
@@ -25,12 +29,47 @@ public class MainActivity extends ActionBarActivity {
    */
   private CharSequence mTitle;
 
+  public void countRecords() {
+    SQLiteBookRepository sbr = new SQLiteBookRepository(this);
+    int count = sbr.count();
+    TextView textViewRecordCount = (TextView) findViewById(R.id.textViewRecordCount);
+    textViewRecordCount.setText(count + " records found.");
+  }
+
+  public void readRecords() {
+    LinearLayout linearLayoutRecords = (LinearLayout) findViewById(R.id.linearLayoutRecords);
+    linearLayoutRecords.removeAllViews();
+    SQLiteBookRepository sbr = new SQLiteBookRepository(this);
+    List<Book> books = sbr.getAll();
+
+    if (books.size() > 0) {
+      for (Book book: books) {
+        int id = book.getId();
+        String name = book.getName();
+        TextView tv = new TextView(this);
+        tv.setPadding(4, 10, 4, 10);
+        tv.setText(name);
+        tv.setTag(Integer.toString(id));
+        tv.setGravity(Gravity.CENTER_HORIZONTAL);
+        tv.setOnLongClickListener(new OnLongClickListenerBookRecord());
+        linearLayoutRecords.addView(tv);
+      }
+    } else {
+      TextView locationItem = new TextView(this);
+      locationItem.setPadding(8, 8, 8, 8);
+      locationItem.setText("No books yet.");
+      linearLayoutRecords.addView(locationItem);
+    }
+  }
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
-
+    Button buttonCreateBookLocation = (Button) findViewById(R.id.buttonCreateBook);
+    buttonCreateBookLocation.setOnClickListener(new OnClickListenerCreateBook(this));
     mTitle = getTitle();
+    readRecords();
+    countRecords();
   }
 
   public void onSectionAttached(int number) {

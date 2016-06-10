@@ -52,8 +52,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
       SQLiteCharacterRepository.COLUMN_NAME_APPEARANCEPAGE + " INTEGER, " +
       SQLiteCharacterRepository.COLUMN_NAME_PICTURE + " BLOB, " +
       "FOREIGN KEY (" + SQLiteCharacterRepository.COLUMN_NAME_BOOK + ") REFERENCES " +
-        SQLiteBookRepository.TABLE_NAME + ".(" + SQLiteBookRepository.COLUMN_NAME_ID + ")" +
-      ")";
+        SQLiteBookRepository.TABLE_NAME + "(" + SQLiteBookRepository.COLUMN_NAME_ID +
+      "));";
   }
 
   private String createRelationshipsTable() {
@@ -64,9 +64,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
       "PRIMARY KEY (" + SQLiteRelationshipRepository.COLUMN_NAME_FISRTCHARACTER + ", " +
         SQLiteRelationshipRepository.COLUMN_NAME_SECONDCHARACTER + "), " +
       "FOREIGN KEY (" + SQLiteRelationshipRepository.COLUMN_NAME_FISRTCHARACTER + ") REFERENCES " +
-        SQLiteCharacterRepository.TABLE_NAME + ".(" + SQLiteCharacterRepository.COLUMN_NAME_ID + "), " +
+        SQLiteCharacterRepository.TABLE_NAME + "(" + SQLiteCharacterRepository.COLUMN_NAME_ID + "), " +
       "FOREIGN KEY (" + SQLiteRelationshipRepository.COLUMN_NAME_SECONDCHARACTER + ") REFERENCES " +
-        SQLiteCharacterRepository.TABLE_NAME + ".(" + SQLiteCharacterRepository.COLUMN_NAME_ID + ")" +
-      ")";
+        SQLiteCharacterRepository.TABLE_NAME + "(" + SQLiteCharacterRepository.COLUMN_NAME_ID + ")" +
+      ");";
   }
 }

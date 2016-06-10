@@ -6,7 +6,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
+  <LinearLayout
+    android:id="@+id/outerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+  <Button
+    android:id="@+id/buttonCreateBook"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:text="Create book" />
+  <TextView
+    android:id="@+id/textViewRecordCount"
+    android:gravity="center"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/buttonCreateBook"
+    android:text="0 books found"
+    android:padding="1dp" />
+  <ScrollView
+    android:id="@+id/scrollViewRecords"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/textViewRecordCount" >
 
+    <LinearLayout
+      android:id="@+id/linearLayoutRecords"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      android:gravity="center">
+
+
+    </LinearLayout>
+    </ScrollView>
+  </LinearLayout>
   <!-- As the main content view, the view below consumes the entire
          space available using match_parent in both dimensions. -->
   <FrameLayout
