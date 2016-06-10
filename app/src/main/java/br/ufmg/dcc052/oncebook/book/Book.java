@@ -21,6 +21,7 @@ public class Book implements Serializable {
   @Nullable
   private List<Character> characters;
 
+  public Book(int id) { this(id, "", ""); }
   public Book(String name) {
     this(name, "");
   }

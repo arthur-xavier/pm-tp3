@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
+import br.ufmg.dcc052.oncebook.book.Book;
 import br.ufmg.dcc052.oncebook.character.Character;
 import br.ufmg.dcc052.oncebook.book.SQLiteBookRepository;
 import br.ufmg.dcc052.oncebook.character.SQLiteCharacterRepository;
@@ -37,11 +38,14 @@ public class OnClickListenerCreateCharacter implements View.OnClickListener {
       .setPositiveButton("Create",
         new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int id) {
-            Character character = new Character(editChar.getText().toString(), editCharDesc.getText().toString());
+            Book book = new Book(ba.bookId);
+            Character character = new Character(editChar.getText().toString(),
+              editCharDesc.getText().toString(),
+              book);
             SQLiteCharacterRepository sbr = new SQLiteCharacterRepository(context);
             sbr.save(character);
             if (ba != null) {
-              //ba.readRecords();
+              ba.readRecords();
               ba.countRecords();
             }
             dialog.cancel();
