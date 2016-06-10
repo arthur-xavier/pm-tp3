@@ -11,13 +11,21 @@ import java.io.ByteArrayOutputStream;
 public class BitmapUtils {
 
   public static byte[] getBytes(Bitmap bitmap) {
-    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-    bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
-    return stream.toByteArray();
+    if (bitmap != null) {
+      ByteArrayOutputStream stream = new ByteArrayOutputStream();
+      bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
+      return stream.toByteArray();
+    } else {
+      return null;
+    }
   }
 
   // convert from byte array to bitmap
   public static Bitmap getBitmap(byte[] image) {
-    return BitmapFactory.decodeByteArray(image, 0, image.length);
+    if (image != null) {
+      return BitmapFactory.decodeByteArray(image, 0, image.length);
+    } else {
+      return null;
+    }
   }
 }
