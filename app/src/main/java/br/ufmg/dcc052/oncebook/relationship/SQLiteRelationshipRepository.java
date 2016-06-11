@@ -53,12 +53,27 @@ public class SQLiteRelationshipRepository extends SQLiteRepository<Relationship>
     return relationships;
   }
 
+  public List<Relationship> getAllByCharacter(Character c) {
+    List<Relationship> relationships;
+    Cursor cursor = getAllByCharacterCursor(c);
+    try {
+      relationships = cursorToEntities(cursor);
+    } finally {
+      cursor.close();
+    }
+    return relationships;
+  }
   @Override
   public Cursor getAllCursor() {
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
     return db.query(TABLE_NAME, ALL_COLUMNS, null, null, null, null, null);
   }
 
+  public Cursor getAllByCharacterCursor(Character c) {
+    SQLiteDatabase db = databaseHelper.getReadableDatabase();
+    String where = COLUMN_NAME_FISRTCHARACTER + "=" + c.getId();
+    return db.query(TABLE_NAME, ALL_COLUMNS, where, null, null, null, null);
+  }
   @Override
   public void save(Relationship relationship) {
     SQLiteDatabase db = databaseHelper.getWritableDatabase();
@@ -73,6 +88,25 @@ public class SQLiteRelationshipRepository extends SQLiteRepository<Relationship>
         COLUMN_NAME_SECONDCHARACTER + "=" + relationship.getSecondCharacter().getId();
       if (db.update(TABLE_NAME, values, where, null) == 0) {
         db.insert(TABLE_NAME, null, values);
+      }
+    } finally {
+      closeDatabase(db);
+    }
+  }
+
+  public void save(Relationship oldRelationship, Relationship newRelationship) {
+    SQLiteDatabase db = databaseHelper.getWritableDatabase();
+
+    ContentValues newValues = new ContentValues();
+    newValues.put(COLUMN_NAME_NAME, newRelationship.getName());
+    newValues.put(COLUMN_NAME_FISRTCHARACTER, newRelationship.getFirstCharacter().getId());
+    newValues.put(COLUMN_NAME_SECONDCHARACTER, newRelationship.getSecondCharacter().getId());
+
+    try {
+      String where = COLUMN_NAME_FISRTCHARACTER + "=" + oldRelationship.getFirstCharacter().getId() + " AND " +
+        COLUMN_NAME_SECONDCHARACTER + "=" + oldRelationship.getSecondCharacter().getId();
+      if (db.update(TABLE_NAME, newValues, where, null) == 0) {
+        db.insert(TABLE_NAME, null, newValues);
       }
     } finally {
       closeDatabase(db);

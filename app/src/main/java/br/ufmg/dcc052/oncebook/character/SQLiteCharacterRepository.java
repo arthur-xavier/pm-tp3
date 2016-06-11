@@ -101,6 +101,49 @@ public class SQLiteCharacterRepository extends SQLiteRepository<Character>
     return characters;
   }
 
+  public Character findExactName(String name) {
+    Character character;
+    SQLiteDatabase db = databaseHelper.getReadableDatabase();
+    String where = COLUMN_NAME_NAME + "= '" + name + "'";
+    try {
+      Cursor cursor = db.query(TABLE_NAME, ALL_COLUMNS, where, null, null, null, null);
+      if (cursor != null) {
+        cursor.moveToFirst();
+      }
+      character = cursorToEntity(cursor);
+      cursor.close();
+    } finally {
+      closeDatabase(db);
+    }
+    return character;
+  }
+
+  public List<Character> getCharactersFromSameBook(int id) {
+    List<Character> characters;
+    Character source = this.getById(id);
+    if (source != null) {
+      SQLiteDatabase db = databaseHelper.getReadableDatabase();
+      Book book = source.getBook();
+      int bookId = 0;
+      if (book != null) {
+        bookId = book.getId();
+      } else {
+        return null;
+      }
+      String where = COLUMN_NAME_BOOK + " = " + bookId;
+
+      try {
+        Cursor cursor = db.query(TABLE_NAME, ALL_COLUMNS, where, null, null, null, null);
+        characters = cursorToEntities(cursor);
+        cursor.close();
+      } finally {
+        db.close();
+      }
+      return characters;
+    }
+    return null;
+  }
+
   @Override
   public synchronized void save(Character character) {
     SQLiteDatabase db = databaseHelper.getWritableDatabase();

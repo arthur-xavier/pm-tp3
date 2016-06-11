@@ -14,6 +14,7 @@ import br.ufmg.dcc052.oncebook.character.Character;
 import br.ufmg.dcc052.oncebook.character.SQLiteCharacterRepository;
 
 public class BookActivity extends ActionBarActivity {
+  public final static String CHARACTER_ID = "br.ufmg.dcc052.oncebook.CHARACTER_ID";
   public int bookId;
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +53,7 @@ public class BookActivity extends ActionBarActivity {
 
         tv.setTag(Integer.toString(id));
         tv.setOnLongClickListener(new OnLongClickListenerCharacterRecord(this));
-        /*
-        ADD LISTENERS
-         */
+        tv.setOnClickListener(new OnClickListenerCharacterRecord(this));
         linearLayoutRecords.addView(tv);
       }
     } else {

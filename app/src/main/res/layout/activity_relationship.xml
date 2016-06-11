@@ -19,14 +19,6 @@ tools:context="br.ufmg.dcc052.oncebook.book.RelationshipActivity">
     android:layout_height="wrap_content"
     android:gravity="center"
     android:text="Create relationship" />
-  <TextView
-    android:id="@+id/textViewRecordCount"
-    android:gravity="center"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/buttonCreateRelationship"
-    android:text="0 relationships found"
-    android:padding="1dp" />
   <ScrollView
     android:id="@+id/scrollViewRecords"
     android:layout_width="match_parent"

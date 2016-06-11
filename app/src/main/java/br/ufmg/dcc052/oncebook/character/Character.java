@@ -30,6 +30,7 @@ public class Character {
     this(name, description, null, 0, picture);
   }
 
+  public Character() { }
   public Character(String name, String description, Book book, int appearancePage, Bitmap picture) {
     this.name = name;
     this.description = description;
