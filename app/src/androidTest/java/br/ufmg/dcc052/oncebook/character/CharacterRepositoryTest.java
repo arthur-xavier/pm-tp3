@@ -37,7 +37,6 @@ public class CharacterRepositoryTest extends AndroidTestCase {
     book1 = new Book("Book1", "This is test book 1.");
     book2 = new Book("Book2", "This is test book 2.");
 
-
     character1 = new Character("Character1", "This is test character 1.", book1);
     character2 = new Character("Character2", "This is test character 2.", book1);
     character3 = new Character("Character3", "This is test character 3.", book2);
@@ -78,6 +77,17 @@ public class CharacterRepositoryTest extends AndroidTestCase {
     assertEquals(character2.getDescription(), testCharacter2.getDescription());
   }
 
+  public void testGetCharacterByName() {
+    characterRepository.save(character1);
+    characterRepository.save(character2);
+
+    Character testCharacter1 = characterRepository.getByName("Character1");
+    assertEquals(character1.getDescription(), testCharacter1.getDescription());
+
+    Character testCharacter2 = characterRepository.getByName("Character2");
+    assertEquals(character2.getDescription(), testCharacter2.getDescription());
+  }
+
   public void testGetAllCharacters() {
     characterRepository.save(character1);
     characterRepository.save(character2);
@@ -103,6 +113,25 @@ public class CharacterRepositoryTest extends AndroidTestCase {
     List<Character> book2Characters = characterRepository.getAllByBook(book2);
     assertEquals(1, book2Characters.size());
     assertEquals(character3.getName(), book2Characters.get(0).getName());
+  }
+
+  public void testGetAllCharactersFromSameBook() {
+    bookRepository.save(book1);
+    bookRepository.save(book2);
+    characterRepository.save(character1);
+    characterRepository.save(character2);
+    characterRepository.save(character3);
+
+    List<Character> character1BookCharacters = characterRepository.getAllFromSameBook(character1);
+    assertEquals(1, character1BookCharacters.size());
+    assertEquals(character2.getName(), character1BookCharacters.get(0).getName());
+
+    List<Character> character2BookCharacters = characterRepository.getAllFromSameBook(character2);
+    assertEquals(1, character2BookCharacters.size());
+    assertEquals(character1.getName(), character2BookCharacters.get(0).getName());
+
+    List<Character> character3BookCharacters = characterRepository.getAllFromSameBook(character3);
+    assertEquals(0, character3BookCharacters.size());
   }
 
   public void testFindCharacterByName() {
