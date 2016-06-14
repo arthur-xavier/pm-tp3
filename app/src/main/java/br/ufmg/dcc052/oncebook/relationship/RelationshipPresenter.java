@@ -45,12 +45,6 @@ public class RelationshipPresenter implements Refreshable {
     refresh();
   }
 
-  public void saveRelationship(Relationship relationship) {
-    setSelectedRelationship(null);
-    relationshipRepository.save(relationship);
-    refresh();
-  }
-
   public void createRelationship() {
     setSelectedRelationship(null);
     view.showSaveRelationshipDialog();
