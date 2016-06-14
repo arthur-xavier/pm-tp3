@@ -4,9 +4,9 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import br.ufmg.dcc052.oncebook.book.SQLiteBookRepository;
-import br.ufmg.dcc052.oncebook.character.SQLiteCharacterRepository;
-import br.ufmg.dcc052.oncebook.relationship.SQLiteRelationshipRepository;
+import br.ufmg.dcc052.oncebook.book.data.SQLiteBookRepository;
+import br.ufmg.dcc052.oncebook.character.data.SQLiteCharacterRepository;
+import br.ufmg.dcc052.oncebook.relationship.data.SQLiteRelationshipRepository;
 
 /**
  * Created by xavier on 6/6/16.
