@@ -1,4 +1,4 @@
-package br.ufmg.dcc052.oncebook.book;
+package br.ufmg.dcc052.oncebook.book.data;
 
 import android.test.AndroidTestCase;
 import android.test.RenamingDelegatingContext;
@@ -12,7 +12,7 @@ import br.ufmg.dcc052.oncebook.book.domain.Book;
 /**
  * Created by xavier on 6/9/16.
  */
-public class BookRepositoryTest extends AndroidTestCase {
+public class SQLiteBookRepositoryTest extends AndroidTestCase {
 
   private BookRepository bookRepository;
 

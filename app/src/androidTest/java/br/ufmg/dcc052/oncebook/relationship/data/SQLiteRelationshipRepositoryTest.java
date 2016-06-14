@@ -1,4 +1,4 @@
-package br.ufmg.dcc052.oncebook.relationship;
+package br.ufmg.dcc052.oncebook.relationship.data;
 
 import android.test.AndroidTestCase;
 import android.test.RenamingDelegatingContext;
@@ -16,7 +16,7 @@ import br.ufmg.dcc052.oncebook.relationship.domain.Relationship;
 /**
  * Created by xavier on 6/9/16.
  */
-public class RelationshipRepositoryTest extends AndroidTestCase {
+public class SQLiteRelationshipRepositoryTest extends AndroidTestCase {
 
   private RelationshipRepository relationshipRepository;
   private CharacterRepository characterRepository;

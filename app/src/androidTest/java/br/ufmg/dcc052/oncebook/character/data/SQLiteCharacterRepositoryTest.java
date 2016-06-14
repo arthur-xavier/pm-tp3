@@ -1,4 +1,4 @@
-package br.ufmg.dcc052.oncebook.character;
+package br.ufmg.dcc052.oncebook.character.data;
 
 import android.test.AndroidTestCase;
 import android.test.RenamingDelegatingContext;
@@ -15,7 +15,7 @@ import br.ufmg.dcc052.oncebook.character.domain.Character;
 /**
  * Created by xavier on 6/9/16.
  */
-public class CharacterRepositoryTest extends AndroidTestCase {
+public class SQLiteCharacterRepositoryTest extends AndroidTestCase {
 
   private BookRepository bookRepository;
   private CharacterRepository characterRepository;
