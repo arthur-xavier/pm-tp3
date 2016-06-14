@@ -5,17 +5,15 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.ufmg.dcc052.oncebook.storage.DatabaseHelper;
-import br.ufmg.dcc052.oncebook.storage.ICursorLoader;
-import br.ufmg.dcc052.oncebook.storage.SQLiteRepository;
 
 /**
  * Created by xavier on 6/6/16.
  */
-public class SQLiteBookRepository extends SQLiteRepository<Book>
-  implements IBookRepository, ICursorLoader {
+public class SQLiteBookRepository implements BookRepository {
 
   public static final String TABLE_NAME = "books";
   public static final String COLUMN_NAME_ID = "_id";
@@ -35,35 +33,26 @@ public class SQLiteBookRepository extends SQLiteRepository<Book>
     Book book;
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
     String where = COLUMN_NAME_ID + "=" + id;
-    try {
-      Cursor cursor = db.query(TABLE_NAME, ALL_COLUMNS, where, null, null, null, null);
-      if (cursor != null) {
-        cursor.moveToFirst();
-      }
-      book = cursorToEntity(cursor);
-      cursor.close();
-    } finally {
-      closeDatabase(db);
+    Cursor cursor = db.query(TABLE_NAME, ALL_COLUMNS, where, null, null, null, null);
+    if (cursor != null) {
+      cursor.moveToFirst();
     }
+    book = cursorToEntity(cursor);
+    cursor.close();
     return book;
   }
 
   @Override
   public List<Book> getAll() {
     List<Book> books;
-    Cursor cursor = getAllCursor();
+    SQLiteDatabase db = databaseHelper.getReadableDatabase();
+    Cursor cursor = db.query(TABLE_NAME, ALL_COLUMNS, null, null, null, null, "_id DESC");
     try {
       books = cursorToEntities(cursor);
     } finally {
       cursor.close();
     }
     return books;
-  }
-
-  @Override
-  public Cursor getAllCursor() {
-    SQLiteDatabase db = databaseHelper.getReadableDatabase();
-    return db.query(TABLE_NAME, ALL_COLUMNS, null, null, null, null, "_id DESC");
   }
 
   @Override
@@ -71,65 +60,58 @@ public class SQLiteBookRepository extends SQLiteRepository<Book>
     List<Book> books;
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
     String where = COLUMN_NAME_NAME + " LIKE '" + name + "%'";
-    try {
-      Cursor cursor = db.query(TABLE_NAME, ALL_COLUMNS, where, null, null, null, null);
-      books = cursorToEntities(cursor);
-      cursor.close();
-    } finally {
-      closeDatabase(db);
-    }
+    Cursor cursor = db.query(TABLE_NAME, ALL_COLUMNS, where, null, null, null, null);
+    books = cursorToEntities(cursor);
+    cursor.close();
     return books;
   }
 
   @Override
-  public synchronized void save(Book book) {
+  public void save(Book book) {
     SQLiteDatabase db = databaseHelper.getWritableDatabase();
 
     ContentValues values = new ContentValues();
     values.put(COLUMN_NAME_NAME, book.getName());
     values.put(COLUMN_NAME_DESCRIPTION, book.getDescription());
 
-    try {
-      String where = COLUMN_NAME_ID + "=" + book.getId();
+    String where = COLUMN_NAME_ID + "=" + book.getId();
 
-      if (book.getId() != 0) {
-        if (db.update(TABLE_NAME, values, where, null) == 0) {
-          book.setId((int) db.insert(TABLE_NAME, null, values));
-        }
-      } else {
+    if (book.getId() != 0) {
+      if (db.update(TABLE_NAME, values, where, null) == 0) {
         book.setId((int) db.insert(TABLE_NAME, null, values));
       }
-    } finally {
-      closeDatabase(db);
+    } else {
+      book.setId((int) db.insert(TABLE_NAME, null, values));
     }
   }
 
   @Override
-  public synchronized void delete(Book book) {
+  public void delete(Book book) {
     SQLiteDatabase db = databaseHelper.getWritableDatabase();
     String where = COLUMN_NAME_ID + "=" + book.getId();
-    try {
-      db.delete(TABLE_NAME, where, null);
-    } finally {
-      closeDatabase(db);
-    }
+    db.delete(TABLE_NAME, where, null);
   }
 
-  @Override
-  public Book cursorToEntity(Cursor cursor) {
+  private Book cursorToEntity(Cursor cursor) {
     if(cursor == null || cursor.getCount() == 0) {
       return null;
     }
-
     int id = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_ID));
     String name = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_NAME));
     String description = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_DESCRIPTION));
     return new Book(id, name, description);
   }
 
-  private static void closeDatabase(SQLiteDatabase db) {
-    if (db != null && db.isOpen()) {
-      db.close();
+  private List<Book> cursorToEntities(Cursor cursor) {
+    if(cursor == null) {
+      return null;
     }
+    List<Book> books = new ArrayList<>();
+    cursor.moveToFirst();
+    while(!cursor.isAfterLast()) {
+      books.add(this.cursorToEntity(cursor));
+      cursor.moveToNext();
+    }
+    return books;
   }
 }

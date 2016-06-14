@@ -3,23 +3,20 @@ package br.ufmg.dcc052.oncebook.relationship;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.ufmg.dcc052.oncebook.character.Character;
-import br.ufmg.dcc052.oncebook.character.ICharacterRepository;
+import br.ufmg.dcc052.oncebook.character.CharacterRepository;
 import br.ufmg.dcc052.oncebook.character.SQLiteCharacterRepository;
 import br.ufmg.dcc052.oncebook.storage.DatabaseHelper;
-import br.ufmg.dcc052.oncebook.storage.ICursorLoader;
-import br.ufmg.dcc052.oncebook.storage.SQLiteRepository;
 
 /**
  * Created by xavier on 6/6/16.
  */
-public class SQLiteRelationshipRepository extends SQLiteRepository<Relationship>
-                                       implements IRelationshipRepository, ICursorLoader {
+public class SQLiteRelationshipRepository implements RelationshipRepository {
 
   public static final String TABLE_NAME = "relationships";
   public static final String COLUMN_NAME_NAME = "name";
@@ -29,7 +26,7 @@ public class SQLiteRelationshipRepository extends SQLiteRepository<Relationship>
     COLUMN_NAME_SECONDCHARACTER };
 
   private DatabaseHelper databaseHelper;
-  private ICharacterRepository characterRepository;
+  private CharacterRepository characterRepository;
 
   public SQLiteRelationshipRepository(Context context) {
     this.databaseHelper = new DatabaseHelper(context);
@@ -53,6 +50,7 @@ public class SQLiteRelationshipRepository extends SQLiteRepository<Relationship>
     return relationships;
   }
 
+  @Override
   public List<Relationship> getAllByCharacter(Character c) {
     List<Relationship> relationships;
     Cursor cursor = getAllByCharacterCursor(c);
@@ -63,17 +61,28 @@ public class SQLiteRelationshipRepository extends SQLiteRepository<Relationship>
     }
     return relationships;
   }
-  @Override
-  public Cursor getAllCursor() {
+
+  private Cursor getAllCursor() {
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
-    return db.query(TABLE_NAME, ALL_COLUMNS, null, null, null, null, null);
+    String query = "SELECT ROWID as _id";
+    for(String column : ALL_COLUMNS) {
+      query += ", " + column;
+    }
+    query += " FROM " + TABLE_NAME;
+    return db.rawQuery(query, null);
   }
 
-  public Cursor getAllByCharacterCursor(Character c) {
+  private Cursor getAllByCharacterCursor(Character c) {
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
     String where = COLUMN_NAME_FISRTCHARACTER + "=" + c.getId();
-    return db.query(TABLE_NAME, ALL_COLUMNS, where, null, null, null, null);
+    String query = "SELECT ROWID as _id";
+    for(String column : ALL_COLUMNS) {
+      query += ", " + column;
+    }
+    query += " FROM " + TABLE_NAME + " WHERE " + where;
+    return db.rawQuery(query, null);
   }
+
   @Override
   public void save(Relationship relationship) {
     SQLiteDatabase db = databaseHelper.getWritableDatabase();
@@ -83,14 +92,10 @@ public class SQLiteRelationshipRepository extends SQLiteRepository<Relationship>
     values.put(COLUMN_NAME_FISRTCHARACTER, relationship.getFirstCharacter().getId());
     values.put(COLUMN_NAME_SECONDCHARACTER, relationship.getSecondCharacter().getId());
 
-    try {
-      String where = COLUMN_NAME_FISRTCHARACTER + "=" + relationship.getFirstCharacter().getId() + " AND " +
-        COLUMN_NAME_SECONDCHARACTER + "=" + relationship.getSecondCharacter().getId();
-      if (db.update(TABLE_NAME, values, where, null) == 0) {
-        db.insert(TABLE_NAME, null, values);
-      }
-    } finally {
-      closeDatabase(db);
+    String where = COLUMN_NAME_FISRTCHARACTER + "=" + relationship.getFirstCharacter().getId() + " AND " +
+      COLUMN_NAME_SECONDCHARACTER + "=" + relationship.getSecondCharacter().getId();
+    if (db.update(TABLE_NAME, values, where, null) == 0) {
+      db.insert(TABLE_NAME, null, values);
     }
   }
 
@@ -102,14 +107,10 @@ public class SQLiteRelationshipRepository extends SQLiteRepository<Relationship>
     newValues.put(COLUMN_NAME_FISRTCHARACTER, newRelationship.getFirstCharacter().getId());
     newValues.put(COLUMN_NAME_SECONDCHARACTER, newRelationship.getSecondCharacter().getId());
 
-    try {
-      String where = COLUMN_NAME_FISRTCHARACTER + "=" + oldRelationship.getFirstCharacter().getId() + " AND " +
-        COLUMN_NAME_SECONDCHARACTER + "=" + oldRelationship.getSecondCharacter().getId();
-      if (db.update(TABLE_NAME, newValues, where, null) == 0) {
-        db.insert(TABLE_NAME, null, newValues);
-      }
-    } finally {
-      closeDatabase(db);
+    String where = COLUMN_NAME_FISRTCHARACTER + "=" + oldRelationship.getFirstCharacter().getId() + " AND " +
+      COLUMN_NAME_SECONDCHARACTER + "=" + oldRelationship.getSecondCharacter().getId();
+    if (db.update(TABLE_NAME, newValues, where, null) == 0) {
+      db.insert(TABLE_NAME, null, newValues);
     }
   }
 
@@ -118,15 +119,10 @@ public class SQLiteRelationshipRepository extends SQLiteRepository<Relationship>
     SQLiteDatabase db = databaseHelper.getWritableDatabase();
     String where = COLUMN_NAME_FISRTCHARACTER + "=" + relationship.getFirstCharacter().getId() + " AND " +
                    COLUMN_NAME_SECONDCHARACTER + "=" + relationship.getSecondCharacter().getId();
-    try {
-      db.delete(TABLE_NAME, where, null);
-    } finally {
-      closeDatabase(db);
-    }
+    db.delete(TABLE_NAME, where, null);
   }
 
-  @Override
-  public Relationship cursorToEntity(Cursor cursor) {
+  private Relationship cursorToEntity(Cursor cursor) {
     if(cursor == null || cursor.getCount() == 0) {
       return null;
     }
@@ -141,9 +137,16 @@ public class SQLiteRelationshipRepository extends SQLiteRepository<Relationship>
     return new Relationship(name, firstCharacter, secondCharacter);
   }
 
-  private static void closeDatabase(SQLiteDatabase db) {
-    if (db != null && db.isOpen()) {
-      db.close();
+  private List<Relationship> cursorToEntities(Cursor cursor) {
+    if(cursor == null) {
+      return null;
     }
+    List<Relationship> relationships = new ArrayList<>();
+    cursor.moveToFirst();
+    while(!cursor.isAfterLast()) {
+      relationships.add(this.cursorToEntity(cursor));
+      cursor.moveToNext();
+    }
+    return relationships;
   }
 }

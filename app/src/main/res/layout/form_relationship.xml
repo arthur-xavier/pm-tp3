@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+android:orientation="vertical" android:layout_width="match_parent"
+android:layout_height="match_parent">
   <EditText
-    android:id="@+id/editTextCharacterName"
+    android:id="@+id/etRelationshipName"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_alignParentLeft="true"
@@ -14,13 +15,10 @@
     <requestFocus />
   </EditText>
 
-  <EditText
-    android:id="@+id/editTextCharacterDescription"
+  <Spinner
+    android:id="@+id/spinnerSecondCharacter"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:hint="Description"
-    android:singleLine="true"
-    android:layout_below="@+id/editTextCharacterName"
-    android:layout_alignParentLeft="true"
-    android:layout_alignParentStart="true" />
+    android:background="@android:drawable/btn_dropdown"
+    android:spinnerMode="dropdown" />
 </LinearLayout>

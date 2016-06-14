@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class BookRepositoryTest extends AndroidTestCase {
 
-  private IBookRepository bookRepository;
+  private BookRepository bookRepository;
 
   private Book book1;
   private Book book2;

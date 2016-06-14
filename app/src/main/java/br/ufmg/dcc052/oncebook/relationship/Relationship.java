@@ -21,6 +21,11 @@ public class Relationship {
     this.secondCharacter = secondCharacter;
   }
 
+  @Override
+  public String toString() {
+    return name + " of " + secondCharacter.getName();
+  }
+
   public String getName() {
     return this.name;
   }

@@ -6,21 +6,19 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.ufmg.dcc052.oncebook.book.Book;
-import br.ufmg.dcc052.oncebook.book.IBookRepository;
+import br.ufmg.dcc052.oncebook.book.BookRepository;
 import br.ufmg.dcc052.oncebook.book.SQLiteBookRepository;
 import br.ufmg.dcc052.oncebook.storage.BitmapUtils;
 import br.ufmg.dcc052.oncebook.storage.DatabaseHelper;
-import br.ufmg.dcc052.oncebook.storage.ICursorLoader;
-import br.ufmg.dcc052.oncebook.storage.SQLiteRepository;
 
 /**
  * Created by xavier on 6/6/16.
  */
-public class SQLiteCharacterRepository extends SQLiteRepository<Character>
-                                       implements ICharacterRepository, ICursorLoader {
+public class SQLiteCharacterRepository implements CharacterRepository {
 
   public static final String TABLE_NAME = "characters";
   public static final String COLUMN_NAME_ID = "_id";
@@ -36,7 +34,7 @@ public class SQLiteCharacterRepository extends SQLiteRepository<Character>
     COLUMN_NAME_DESCRIPTION, COLUMN_NAME_APPEARANCEPAGE, COLUMN_NAME_PICTURE };
 
   private DatabaseHelper databaseHelper;
-  private IBookRepository bookRepository;
+  private BookRepository bookRepository;
 
   public SQLiteCharacterRepository(Context context) {
     this.databaseHelper = new DatabaseHelper(context);
@@ -48,25 +46,36 @@ public class SQLiteCharacterRepository extends SQLiteRepository<Character>
     Character character;
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
     String where = COLUMN_NAME_ID + "=" + id;
-    try {
-      Cursor cursor = db.query(TABLE_NAME, ALL_COLUMNS, where, null, null, null, null);
-      if (cursor != null) {
-        cursor.moveToFirst();
-      }
-      character = cursorToEntity(cursor);
-      cursor.close();
-    } finally {
-      closeDatabase(db);
+    Cursor cursor = db.query(TABLE_NAME, ALL_COLUMNS, where, null, null, null, null);
+    if (cursor != null) {
+      cursor.moveToFirst();
     }
+    character = cursorToEntity(cursor);
+    cursor.close();
+    return character;
+  }
+
+  @Override
+  public Character getByName(String name) {
+    Character character;
+    SQLiteDatabase db = databaseHelper.getReadableDatabase();
+    String where = COLUMN_NAME_NAME + "='" + name + "'";
+    Cursor cursor = db.query(TABLE_NAME, ALL_COLUMNS, where, null, null, null, null);
+    if (cursor != null) {
+      cursor.moveToFirst();
+    }
+    character = cursorToEntity(cursor);
+    cursor.close();
     return character;
   }
 
   @Override
   public List<Character> getAll() {
     List<Character> characters;
-    Cursor cursor = getAllCursor();
+    SQLiteDatabase db = databaseHelper.getReadableDatabase();
+    Cursor cursor = db.query(TABLE_NAME, ALL_COLUMNS, null, null, null, null, null);
     try {
-      characters = cursorToEntities(cursor);
+      characters = cursorToEntities(cursor, null);
     } finally {
       cursor.close();
     }
@@ -74,16 +83,32 @@ public class SQLiteCharacterRepository extends SQLiteRepository<Character>
   }
 
   @Override
-  public Cursor getAllCursor() {
+  public List<Character> getAllByBook(Book book) {
+    List<Character> characters;
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
-    return db.query(TABLE_NAME, ALL_COLUMNS, null, null, null, null, null);
+    String where = COLUMN_NAME_BOOK + "=" + book.getId();
+    Cursor cursor = db.query(TABLE_NAME, ALL_COLUMNS_BUT_BOOK, where, null, null, null, null);
+    try {
+      characters = cursorToEntities(cursor, book);
+    } finally {
+      cursor.close();
+    }
+    return characters;
   }
 
   @Override
-  public Cursor getAllByBookCursor(Book book) {
+  public List<Character> getAllFromSameBook(Character character) {
+    List<Character> characters;
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
-    String where = COLUMN_NAME_BOOK + "=" + book.getId();
-    return db.query(TABLE_NAME, ALL_COLUMNS_BUT_BOOK, where, null, null, null, null);
+    String where = COLUMN_NAME_BOOK + "=" + character.getBook().getId() +
+      " AND " + COLUMN_NAME_ID + "!=" + character.getId();
+    Cursor cursor = db.query(TABLE_NAME, ALL_COLUMNS_BUT_BOOK, where, null, null, null, null);
+    try {
+      characters = cursorToEntities(cursor, character.getBook());
+    } finally {
+      cursor.close();
+    }
+    return characters;
   }
 
   @Override
@@ -91,61 +116,14 @@ public class SQLiteCharacterRepository extends SQLiteRepository<Character>
     List<Character> characters;
     SQLiteDatabase db = databaseHelper.getReadableDatabase();
     String where = COLUMN_NAME_NAME + " LIKE '" + name + "%'";
-    try {
-      Cursor cursor = db.query(TABLE_NAME, ALL_COLUMNS, where, null, null, null, null);
-      characters = cursorToEntities(cursor);
-      cursor.close();
-    } finally {
-      db.close();
-    }
+    Cursor cursor = db.query(TABLE_NAME, ALL_COLUMNS, where, null, null, null, null);
+    characters = cursorToEntities(cursor, null);
+    cursor.close();
     return characters;
   }
 
-  public Character findExactName(String name) {
-    Character character;
-    SQLiteDatabase db = databaseHelper.getReadableDatabase();
-    String where = COLUMN_NAME_NAME + "= '" + name + "'";
-    try {
-      Cursor cursor = db.query(TABLE_NAME, ALL_COLUMNS, where, null, null, null, null);
-      if (cursor != null) {
-        cursor.moveToFirst();
-      }
-      character = cursorToEntity(cursor);
-      cursor.close();
-    } finally {
-      closeDatabase(db);
-    }
-    return character;
-  }
-
-  public List<Character> getCharactersFromSameBook(int id) {
-    List<Character> characters;
-    Character source = this.getById(id);
-    if (source != null) {
-      SQLiteDatabase db = databaseHelper.getReadableDatabase();
-      Book book = source.getBook();
-      int bookId = 0;
-      if (book != null) {
-        bookId = book.getId();
-      } else {
-        return null;
-      }
-      String where = COLUMN_NAME_BOOK + " = " + bookId;
-
-      try {
-        Cursor cursor = db.query(TABLE_NAME, ALL_COLUMNS, where, null, null, null, null);
-        characters = cursorToEntities(cursor);
-        cursor.close();
-      } finally {
-        db.close();
-      }
-      return characters;
-    }
-    return null;
-  }
-
   @Override
-  public synchronized void save(Character character) {
+  public void save(Character character) {
     SQLiteDatabase db = databaseHelper.getWritableDatabase();
 
     ContentValues values = new ContentValues();
@@ -153,39 +131,26 @@ public class SQLiteCharacterRepository extends SQLiteRepository<Character>
     values.put(COLUMN_NAME_DESCRIPTION, character.getDescription());
     values.put(COLUMN_NAME_APPEARANCEPAGE, character.getAppearancePage());
     values.put(COLUMN_NAME_PICTURE, BitmapUtils.getBytes(character.getPicture()));
-    int bookId = 0;
-    if (character.getBook() != null) {
-      bookId = character.getBook().getId();
-    }
-    values.put(COLUMN_NAME_BOOK, Integer.toString(bookId));
+    values.put(COLUMN_NAME_BOOK, character.getBook().getId());
 
-    try {
+    if (character.getId() != 0) {
       String where = COLUMN_NAME_ID + "=" + character.getId();
-      if (character.getId() != 0) {
-        if (db.update(TABLE_NAME, values, where, null) == 0) {
-          character.setId((int) db.insert(TABLE_NAME, null, values));
-        }
-      } else {
+      if (db.update(TABLE_NAME, values, where, null) == 0) {
         character.setId((int) db.insert(TABLE_NAME, null, values));
       }
-    } finally {
-      closeDatabase(db);
+    } else {
+      character.setId((int) db.insert(TABLE_NAME, null, values));
     }
   }
 
   @Override
-  public synchronized void delete(Character character) {
+  public void delete(Character character) {
     SQLiteDatabase db = databaseHelper.getWritableDatabase();
     String where = COLUMN_NAME_ID + "=" + character.getId();
-    try {
-      db.delete(TABLE_NAME, where, null);
-    } finally {
-      closeDatabase(db);
-    }
+    db.delete(TABLE_NAME, where, null);
   }
 
-  @Override
-  public Character cursorToEntity(Cursor cursor) {
+  private Character cursorToEntity(Cursor cursor) {
     if(cursor == null || cursor.getCount() == 0) {
       return null;
     }
@@ -208,17 +173,20 @@ public class SQLiteCharacterRepository extends SQLiteRepository<Character>
     }
   }
 
-  private static void closeDatabase(SQLiteDatabase db) {
-    if (db != null && db.isOpen()) {
-      db.close();
+  private List<Character> cursorToEntities(Cursor cursor, Book book) {
+    if(cursor == null) {
+      return null;
     }
-  }
-
-  public int count() {
-    SQLiteDatabase db = databaseHelper.getWritableDatabase();
-    String sql = "SELECT * FROM characters";
-    int count = db.rawQuery(sql, null).getCount();
-    db.close();
-    return count;
+    List<Character> characters = new ArrayList<>();
+    cursor.moveToFirst();
+    while(!cursor.isAfterLast()) {
+      Character character = this.cursorToEntity(cursor);
+      if (book != null) {
+        character.setBook(book);
+      }
+      characters.add(character);
+      cursor.moveToNext();
+    }
+    return characters;
   }
 }

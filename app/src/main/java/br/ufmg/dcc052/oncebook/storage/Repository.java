@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by xavier on 6/6/16.
  */
-public interface IRepository<T, K> {
+public interface Repository<T, K> {
 
   @Nullable
   T getById(@NonNull K id);

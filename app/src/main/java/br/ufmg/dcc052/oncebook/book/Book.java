@@ -29,7 +29,7 @@ public class Book implements Serializable {
   public Book(String name, String description) {
     this.name = name;
     this.description = description;
-    this.characters = new ArrayList<Character>();
+    this.characters = new ArrayList<>();
   }
 
   public Book(int id, String name, String description) {

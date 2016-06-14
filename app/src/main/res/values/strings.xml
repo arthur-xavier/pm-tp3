@@ -16,4 +16,7 @@
   <item type="id" name="first_character_tag"/>
   <item type="id" name="second_character_tag"/>
   <item type="id" name="relationship_name_tag"/>
+  <string name="title_activity_books">BooksActivity</string>
+
+  <string name="hello_world">Hello world!</string>
 </resources>

@@ -2,26 +2,43 @@ package br.ufmg.dcc052.oncebook.book;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.text.Layout;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.CursorAdapter;
+import android.widget.ListAdapter;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import br.ufmg.dcc052.oncebook.R;
 
 /**
  * Created by xavier on 6/6/16.
  */
-public class BookAdapter extends CursorAdapter {
+public class BookAdapter extends ArrayAdapter<Book> {
 
-  public BookAdapter(Context context) {
-    super(context, new SQLiteBookRepository(context).getAllCursor(), 0);
+  public BookAdapter(Context context, List<Book> books) {
+    super(context, 0, books);
   }
 
   @Override
-  public View newView(Context context, Cursor cursor, ViewGroup parent) {
-    return null;
-  }
+  public View getView(int position, View view, ViewGroup parent) {
+    if (view == null) {
+      view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_book, parent, false);
+    }
 
-  @Override
-  public void bindView(View view, Context context, Cursor cursor) {
+    Book book = getItem(position);
 
+    TextView tvBookName = (TextView) view.findViewById(R.id.tvBookName);
+    TextView tvBookDescription = (TextView) view.findViewById(R.id.tvBookDescription);
+    tvBookName.setText(book.getName());
+    tvBookDescription.setText(book.getDescription());
+
+    return view;
   }
 }

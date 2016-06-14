@@ -2,26 +2,42 @@ package br.ufmg.dcc052.oncebook.character;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.CursorAdapter;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import br.ufmg.dcc052.oncebook.R;
+import br.ufmg.dcc052.oncebook.book.Book;
 
 /**
  * Created by xavier on 6/6/16.
  */
-public class CharacterAdapter extends CursorAdapter {
+public class CharacterAdapter extends ArrayAdapter<Character> {
 
-  public CharacterAdapter(Context context) {
-    super(context, new SQLiteCharacterRepository(context).getAllCursor(), 0);
+  public CharacterAdapter(Context context, List<Character> characters) {
+    super(context, 0, characters);
   }
 
   @Override
-  public View newView(Context context, Cursor cursor, ViewGroup parent) {
-    return null;
-  }
+  public View getView(int position, View view, ViewGroup parent) {
+    if (view == null) {
+      view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_character, parent, false);
+    }
 
-  @Override
-  public void bindView(View view, Context context, Cursor cursor) {
+    Character character = getItem(position);
 
+    TextView tvCharacterName = (TextView) view.findViewById(R.id.tvCharacterName);
+    TextView tvCharacterDescription = (TextView) view.findViewById(R.id.tvCharacterDescription);
+    tvCharacterName.setText(character.getName());
+    tvCharacterDescription.setText(character.getDescription());
+
+    return view;
   }
 }
