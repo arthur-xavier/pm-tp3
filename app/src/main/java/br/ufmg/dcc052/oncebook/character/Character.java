@@ -12,7 +12,7 @@ import br.ufmg.dcc052.oncebook.relationship.Relationship;
  * Created by xavier on 6/6/16.
  */
 public class Character {
-
+/*new functions branch - 15-06*/
   private int id;
   private String name;
   private String description;
