@@ -5,12 +5,12 @@ import android.test.RenamingDelegatingContext;
 
 import java.util.List;
 
-import br.ufmg.dcc052.oncebook.book.domain.Book;
-import br.ufmg.dcc052.oncebook.book.data.BookRepository;
-import br.ufmg.dcc052.oncebook.book.data.SQLiteBookRepository;
-import br.ufmg.dcc052.oncebook.character.data.CharacterRepository;
-import br.ufmg.dcc052.oncebook.character.data.SQLiteCharacterRepository;
-import br.ufmg.dcc052.oncebook.character.domain.Character;
+import br.ufmg.dcc052.oncebook.book.Book;
+import br.ufmg.dcc052.oncebook.book.BookRepository;
+import br.ufmg.dcc052.oncebook.book.SQLiteBookRepository;
+import br.ufmg.dcc052.oncebook.character.CharacterRepository;
+import br.ufmg.dcc052.oncebook.character.SQLiteCharacterRepository;
+import br.ufmg.dcc052.oncebook.character.Character;
 
 /**
  * Created by xavier on 6/9/16.
@@ -23,7 +23,7 @@ public class SQLiteCharacterRepositoryTest extends AndroidTestCase {
   private Book book1;
   private Book book2;
 
-  private br.ufmg.dcc052.oncebook.character.domain.Character character1;
+  private Character character1;
   private Character character2;
   private Character character3;
 
