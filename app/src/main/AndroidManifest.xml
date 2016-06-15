@@ -8,7 +8,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".book.view.BookActivity"
+            android:name=".book.ui.BookActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,10 +17,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".character.view.CharacterActivity"
+            android:name=".character.ui.CharacterActivity"
             android:label="@string/title_activity_book" />
         <activity
-            android:name=".relationship.view.RelationshipActivity"
+            android:name=".relationship.ui.RelationshipActivity"
             android:label="@string/title_activity_relationship" />
     </application>
 

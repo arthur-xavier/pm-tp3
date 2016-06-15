@@ -5,13 +5,13 @@ import android.test.RenamingDelegatingContext;
 
 import java.util.List;
 
-import br.ufmg.dcc052.oncebook.book.domain.Book;
-import br.ufmg.dcc052.oncebook.character.domain.Character;
-import br.ufmg.dcc052.oncebook.character.data.CharacterRepository;
-import br.ufmg.dcc052.oncebook.character.data.SQLiteCharacterRepository;
-import br.ufmg.dcc052.oncebook.relationship.data.RelationshipRepository;
-import br.ufmg.dcc052.oncebook.relationship.data.SQLiteRelationshipRepository;
-import br.ufmg.dcc052.oncebook.relationship.domain.Relationship;
+import br.ufmg.dcc052.oncebook.book.Book;
+import br.ufmg.dcc052.oncebook.character.Character;
+import br.ufmg.dcc052.oncebook.character.CharacterRepository;
+import br.ufmg.dcc052.oncebook.character.SQLiteCharacterRepository;
+import br.ufmg.dcc052.oncebook.relationship.RelationshipRepository;
+import br.ufmg.dcc052.oncebook.relationship.SQLiteRelationshipRepository;
+import br.ufmg.dcc052.oncebook.relationship.Relationship;
 
 /**
  * Created by xavier on 6/9/16.

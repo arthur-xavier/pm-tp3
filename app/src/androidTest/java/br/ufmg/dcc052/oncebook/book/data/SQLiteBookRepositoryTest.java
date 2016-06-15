@@ -5,9 +5,9 @@ import android.test.RenamingDelegatingContext;
 
 import java.util.List;
 
-import br.ufmg.dcc052.oncebook.book.data.BookRepository;
-import br.ufmg.dcc052.oncebook.book.data.SQLiteBookRepository;
-import br.ufmg.dcc052.oncebook.book.domain.Book;
+import br.ufmg.dcc052.oncebook.book.Book;
+import br.ufmg.dcc052.oncebook.book.BookRepository;
+import br.ufmg.dcc052.oncebook.book.SQLiteBookRepository;
 
 /**
  * Created by xavier on 6/9/16.
