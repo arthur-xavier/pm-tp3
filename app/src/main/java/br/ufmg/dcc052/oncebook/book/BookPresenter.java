@@ -40,6 +40,10 @@ public class BookPresenter implements Refreshable {
     view.showSaveBookDialog();
   }
 
+  public void editCurrentPage(Book book) {
+    setSelectedBook(book);
+    view.showCurrentPageDialog();
+  }
   public void deleteBook(Book book) {
     setSelectedBook(null);
     bookRepository.delete(book);

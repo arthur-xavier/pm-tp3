@@ -21,7 +21,7 @@ public class BookSelectedDialog implements Showable, DialogInterface.OnClickList
   public BookSelectedDialog(BookPresenter presenter, Context context) {
     this.presenter = presenter;
 
-    final CharSequence[] options = {"Edit", "Delete"};
+    final CharSequence[] options = {"Edit", "Edit current page", "Delete"};
     dialog = new AlertDialog.Builder(context)
       .setTitle(presenter.getSelectedBook().getName())
       .setItems(options, this)
@@ -40,6 +40,9 @@ public class BookSelectedDialog implements Showable, DialogInterface.OnClickList
         presenter.editBook(presenter.getSelectedBook());
         break;
       case 1:
+        presenter.editCurrentPage(presenter.getSelectedBook());
+        break;
+      case 2:
         presenter.deleteBook(presenter.getSelectedBook());
         break;
     }

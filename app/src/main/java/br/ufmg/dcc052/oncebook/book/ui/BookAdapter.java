@@ -31,8 +31,10 @@ public class BookAdapter extends ArrayAdapter<Book> {
 
     TextView tvBookName = (TextView) view.findViewById(R.id.tvBookName);
     TextView tvBookDescription = (TextView) view.findViewById(R.id.tvBookDescription);
+    /*TextView tvBookNumPages = (TextView) view.findViewById(R.id.tvBookNumPages);*/
     tvBookName.setText(book.getName());
     tvBookDescription.setText(book.getDescription());
+    /*tvBookNumPages.setText(Integer.toString(book.getNumberOfPages()) + " pages");*/
 
     return view;
   }

@@ -23,6 +23,7 @@ public class SaveBookDialog implements Showable, DialogInterface.OnClickListener
   private Dialog dialog;
   private EditText etBookName;
   private EditText etBookDescription;
+  private EditText etBookNumPages;
 
   public SaveBookDialog(BookPresenter presenter, Context context) {
     this.presenter = presenter;
@@ -30,12 +31,14 @@ public class SaveBookDialog implements Showable, DialogInterface.OnClickListener
     View formBookView = LayoutInflater.from(context).inflate(R.layout.form_book, null, false);
     etBookName = (EditText) formBookView.findViewById(R.id.etBookName);
     etBookDescription = (EditText) formBookView.findViewById(R.id.etBookDescription);
+    etBookNumPages = (EditText) formBookView.findViewById(R.id.etBookNumPages);
 
     Book book = presenter.getSelectedBook();
 
     if (book != null) {
       etBookName.setText(book.getName());
       etBookDescription.setText(book.getDescription());
+      etBookNumPages.setText(Integer.toString(book.getNumberOfPages()));
     }
 
     dialog = new AlertDialog.Builder(context)
@@ -55,10 +58,11 @@ public class SaveBookDialog implements Showable, DialogInterface.OnClickListener
     Book book = presenter.getSelectedBook();
 
     if(book == null) {
-      book = new Book(etBookName.getText().toString(), etBookDescription.getText().toString());
+      book = new Book(etBookName.getText().toString(), etBookDescription.getText().toString(), Integer.parseInt(etBookNumPages.getText().toString()));
     } else {
       book.setName(etBookName.getText().toString());
       book.setDescription(etBookDescription.getText().toString());
+      book.setNumberOfPages(Integer.parseInt(etBookNumPages.getText().toString()));
     }
 
     presenter.saveBook(book);
