@@ -37,6 +37,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
       SQLiteBookRepository.COLUMN_NAME_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
       SQLiteBookRepository.COLUMN_NAME_NAME + " TEXT, " +
       SQLiteBookRepository.COLUMN_NAME_DESCRIPTION + " TEXT" +
+      SQLiteBookRepository.COLUMN_NAME_NUMBERPAGES + " INTEGER" +
+      SQLiteBookRepository.COLUMN_NAME_CURRENTPAGE + " INTEGER" +
       ")";
   }
 

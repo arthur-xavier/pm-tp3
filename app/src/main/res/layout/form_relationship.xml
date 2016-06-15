@@ -15,6 +15,15 @@ android:layout_height="match_parent">
     <requestFocus />
   </EditText>
 
+  <EditText
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:inputType="numberDecimal"
+    android:ems="10"
+    android:id="@+id/etRelationshipAppearancePage"
+    android:hint="Appearance Page"
+    android:numeric="integer" />
+
   <Spinner
     android:id="@+id/spinnerSecondCharacter"
     android:layout_width="match_parent"

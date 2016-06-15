@@ -38,7 +38,7 @@ public class SQLiteRelationshipRepositoryTest extends AndroidTestCase {
     relationshipRepository = new SQLiteRelationshipRepository(context);
     characterRepository = new SQLiteCharacterRepository(context);
 
-    book1 = new Book("Book1", "This is test book 1.");
+    book1 = new Book("Book1", "This is test book 1.", 1000);
 
     character1 = new Character("Character1", "This is test character 1.", book1);
     character2 = new Character("Character2", "This is test character 2.", book1);

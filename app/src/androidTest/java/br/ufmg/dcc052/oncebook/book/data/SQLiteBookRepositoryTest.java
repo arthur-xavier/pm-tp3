@@ -25,8 +25,8 @@ public class SQLiteBookRepositoryTest extends AndroidTestCase {
     RenamingDelegatingContext context = new RenamingDelegatingContext(getContext(), "test_");
     bookRepository = new SQLiteBookRepository(context);
 
-    book1 = new Book("Book1", "This is test book 1.");
-    book2 = new Book("Book2", "This is test book 2.");
+    book1 = new Book("Book1", "This is test book 1.", 1000);
+    book2 = new Book("Book2", "This is test book 2.", 1000);
   }
 
   @Override

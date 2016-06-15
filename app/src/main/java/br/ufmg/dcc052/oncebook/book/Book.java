@@ -19,21 +19,35 @@ public class Book implements Serializable {
   private String description;
   @Nullable
   private List<Character> characters;
+  private int numberOfPages;
+  private int currentPage;
 
-  public Book(int id) { this(id, "", ""); }
+  public Book(int id) { this(id, "", "", 0); }
   public Book(String name) {
-    this(name, "");
+    this(name, "", 0);
   }
 
-  public Book(String name, String description) {
+  public Book(String name, String description, int numberOfPages) {
     this.name = name;
     this.description = description;
     this.characters = new ArrayList<>();
+    this.numberOfPages = numberOfPages;
+    this.currentPage = 0;
   }
 
-  public Book(int id, String name, String description) {
-    this(name, description);
+  public Book(String name, String description, int numberOfPages, int currentPage) {
+    this(name, description, numberOfPages);
+    this.currentPage = currentPage;
+  }
+
+  public Book(int id, String name, String description, int numberOfPages) {
+    this(name, description, numberOfPages);
     this.id = id;
+  }
+
+  public Book(int id, String name, String description, int numberOfPages, int currentPage) {
+    this (id, name, description, numberOfPages);
+    this.currentPage = currentPage;
   }
 
   public int getId() {
@@ -60,4 +74,10 @@ public class Book implements Serializable {
   public List<Character> getCharacters() {
     return characters;
   }
+
+  public int getNumberOfPages() { return numberOfPages; }
+  public void setNumberOfPages(int numberOfPages) { this.numberOfPages = numberOfPages; }
+
+  public int getCurrentPage() { return currentPage; }
+  public void setCurrentPage(int currentPage) { this.currentPage = currentPage; }
 }

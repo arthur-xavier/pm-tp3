@@ -19,8 +19,10 @@ public class SQLiteBookRepository implements BookRepository {
   public static final String COLUMN_NAME_ID = "_id";
   public static final String COLUMN_NAME_NAME = "name";
   public static final String COLUMN_NAME_DESCRIPTION = "description";
+  public static final String COLUMN_NAME_NUMBERPAGES = "numpages";
+  public static final String COLUMN_NAME_CURRENTPAGE = "curentpage";
   public static final String[] ALL_COLUMNS = { COLUMN_NAME_ID, COLUMN_NAME_NAME,
-    COLUMN_NAME_DESCRIPTION };
+    COLUMN_NAME_DESCRIPTION, COLUMN_NAME_NUMBERPAGES, COLUMN_NAME_CURRENTPAGE };
 
   private DatabaseHelper databaseHelper;
 
@@ -73,6 +75,8 @@ public class SQLiteBookRepository implements BookRepository {
     ContentValues values = new ContentValues();
     values.put(COLUMN_NAME_NAME, book.getName());
     values.put(COLUMN_NAME_DESCRIPTION, book.getDescription());
+    values.put(COLUMN_NAME_NUMBERPAGES, book.getNumberOfPages());
+    values.put(COLUMN_NAME_CURRENTPAGE, book.getCurrentPage());
 
     String where = COLUMN_NAME_ID + "=" + book.getId();
 
@@ -99,7 +103,9 @@ public class SQLiteBookRepository implements BookRepository {
     int id = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_ID));
     String name = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_NAME));
     String description = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_DESCRIPTION));
-    return new Book(id, name, description);
+    int numberOfPages = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_NUMBERPAGES));
+    int currentPage = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_CURRENTPAGE));
+    return new Book(id, name, description, numberOfPages, currentPage);
   }
 
   private List<Book> cursorToEntities(Cursor cursor) {
