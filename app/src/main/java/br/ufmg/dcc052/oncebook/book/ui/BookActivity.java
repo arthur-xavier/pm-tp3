@@ -77,6 +77,9 @@ public class BookActivity
   }
 
   @Override
+  public void showCurrentPageDialog() { new CurrentPageDialog(presenter, this).show(); }
+
+  @Override
   public void showBookDeletedToast() {
     Toast
       .makeText(this, "Book deleted successfully", Toast.LENGTH_SHORT)

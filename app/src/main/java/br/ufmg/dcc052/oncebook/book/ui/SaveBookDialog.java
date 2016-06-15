@@ -38,7 +38,7 @@ public class SaveBookDialog implements Showable, DialogInterface.OnClickListener
     if (book != null) {
       etBookName.setText(book.getName());
       etBookDescription.setText(book.getDescription());
-      etBookNumPages.setText(book.getNumberOfPages());
+      etBookNumPages.setText(Integer.toString(book.getNumberOfPages()));
     }
 
     dialog = new AlertDialog.Builder(context)

@@ -27,17 +27,15 @@ public class Book implements Serializable {
     this(name, "", 0);
   }
 
-  public Book(String name, String description, int numberOfPages) {
+  public Book(String name, String description, int numberOfPages, int currentPage) {
     this.name = name;
     this.description = description;
-    this.characters = new ArrayList<>();
     this.numberOfPages = numberOfPages;
-    this.currentPage = 0;
+    this.currentPage = currentPage;
   }
 
-  public Book(String name, String description, int numberOfPages, int currentPage) {
-    this(name, description, numberOfPages);
-    this.currentPage = currentPage;
+  public Book(String name, String description, int numberOfPages) {
+    this(name, description, numberOfPages, 0);
   }
 
   public Book(int id, String name, String description, int numberOfPages) {

@@ -36,8 +36,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     return "CREATE TABLE IF NOT EXISTS " + SQLiteBookRepository.TABLE_NAME + " (" +
       SQLiteBookRepository.COLUMN_NAME_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
       SQLiteBookRepository.COLUMN_NAME_NAME + " TEXT, " +
-      SQLiteBookRepository.COLUMN_NAME_DESCRIPTION + " TEXT" +
-      SQLiteBookRepository.COLUMN_NAME_NUMBERPAGES + " INTEGER" +
+      SQLiteBookRepository.COLUMN_NAME_DESCRIPTION + " TEXT," +
+      SQLiteBookRepository.COLUMN_NAME_NUMBERPAGES + " INTEGER," +
       SQLiteBookRepository.COLUMN_NAME_CURRENTPAGE + " INTEGER" +
       ")";
   }

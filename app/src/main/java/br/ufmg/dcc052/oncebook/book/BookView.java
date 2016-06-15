@@ -10,4 +10,5 @@ public interface BookView extends OnItemsListener<Book> {
   void showSaveBookDialog();
   void showBookSelectedDialog();
   void showBookDeletedToast();
+  void showCurrentPageDialog();
 }
