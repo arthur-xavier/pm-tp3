@@ -15,7 +15,7 @@ import br.ufmg.dcc052.oncebook.storage.DatabaseHelper;
  * Created by xavier on 6/6/16.
  */
 public class SQLiteBookRepository implements BookRepository {
-
+/* New branch */
   public static final String TABLE_NAME = "books";
   public static final String COLUMN_NAME_ID = "_id";
   public static final String COLUMN_NAME_NAME = "name";
